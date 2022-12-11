@@ -28,3 +28,13 @@ body {
         width: 75%;
         padding: 20px;
 }
+
+a:link {
+        color: #000;
+        text-decoration: underline;
+}
+
+a:visited {
+        color: #000;
+        text-decoration: underline;
+}
