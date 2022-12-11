@@ -70,7 +70,7 @@ a:visited {
 }
 
 footer {
-        flex: 0 0 1vh;/*or just height:50px;*/
+        flex: 0 0 1vh;
         margin-top: auto;
         padding-bottom: 1vh;
 }
