@@ -12,6 +12,21 @@
 
 	<link rel="icon" href="favicon.ico" type="image/x-icon" />
 
+<script>
+
+var x = setInterval(function() {
+
+  var days = Math.floor(((new Date("Dec 23, 2022 09:09:09").getTime()) - (new Date().getTime())) / (1000 * 60 * 60 * 24));
+
+  if (days <= 0) {
+    clearInterval(x);
+    document.getElementById("countdown").innerHTML = "Έχουμε ήδη αποχωρήσει!";
+  }
+
+  document.getElementById("countdown").innerHTML = "Αναχωρούμε στις 23 Δεκεμβρίου, δηλαδή σε " + days + " ημέρες!";
+}, 1000);
+</script>
+
 </head>
 
 <body>
@@ -26,6 +41,9 @@
 		</div>
 		<div class="content">
 			<h1>Καλωσορίσατε!</h1>
+			<h3>Ο όμιλός μας, για να γιορτάσει τα Χριστούγεννα, οργανώνει μια εκδρομή σε τρεις πόλεις της Ευρώπης: <a href="milano.html">Μιλάνο</a>, <a href="zürich.html">Ζυρίχη</a> και <a href="münchen.html">Μόναχο</a>.</h3>
+			<h3>Θα περάσουμε 2 μέρες στην κάθε πόλη, επισκέπτοντας σημαντικά αξιοθέατα και λαμβάνοντας μέρος σε τοπικά τουρνουά σκακιού.</h3>
+			<h3 id="countdown"></h3>
 		</div>
 	</div>
 
