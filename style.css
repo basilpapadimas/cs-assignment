@@ -4,6 +4,7 @@
 
 body {
         font-family: Helvetica, Arial, sans-serif;
+        text-align: justify;
 }
 
 html {
@@ -52,7 +53,7 @@ a:visited {
 }
 
 footer {
-        position: fixed;
+        position: relative;
         padding-bottom: 1vh;
         bottom: 0;
         width: 100%;
