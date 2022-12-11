@@ -69,6 +69,10 @@ a:visited {
         flex-direction: column;
 }
 
+.contents {
+        display: block;
+}
+
 footer {
         flex: 0 0 1vh;
         margin-top: auto;
