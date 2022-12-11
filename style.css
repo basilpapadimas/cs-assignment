@@ -6,12 +6,24 @@ body {
         font-family: Helvetica, Arial, sans-serif;
 }
 
+html {
+        margin: 0px;
+        height: 100%;
+        width: 100%;
+     }
+     
+body, .container {
+        margin: 0px;
+        min-height: 100%;
+        width: 100%;
+}
 
 /* flexbox */
 
 .container {
         display: flex;
         justify-content: space-between;
+        height: 100vh;
 }
 
 .sidebar {
@@ -37,4 +49,11 @@ a:link {
 a:visited {
         color: #000;
         text-decoration: underline;
+}
+
+footer {
+        position: fixed;
+        padding-bottom: 1vh;
+        bottom: 0;
+        width: 100%;
 }
