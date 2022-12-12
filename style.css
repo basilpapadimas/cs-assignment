@@ -29,6 +29,11 @@ body,
         max-width: 25%;
 }
 
+.daytable a {
+        text-align: justify;
+        white-space: nowrap;
+}
+
 /* flexbox */
 
 .container {
