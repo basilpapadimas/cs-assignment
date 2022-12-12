@@ -61,14 +61,8 @@ body,
 }
 
 /* text-styling */
-a:link {
-        color: #000;
-        text-decoration: underline;
-}
-
-a:visited {
-        color: #000;
-        text-decoration: underline;
+a {
+        font-weight: bold;
 }
 
 .days {
