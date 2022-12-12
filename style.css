@@ -22,15 +22,12 @@ body,
 }
 
 .centered{
-        top: 0;
-        left: 0;
-        bottom: 0;
+        display: flex;
+        align-items: center;
 }
 
 #knight{
-        max-width: 20%;
-        display: block;
-        float: right;
+        max-width: 25%;
 }
 
 /* flexbox */
@@ -56,7 +53,7 @@ body,
 
 .sidebar a {
         display: block;
-        font-size: 20px;
+        font-size: 1.4em;
 }
 
 .content {
