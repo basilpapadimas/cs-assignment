@@ -23,12 +23,12 @@ body, .container {
 
 .container {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         height: 100vh;
 }
 
 .sidebar {
-        width: 20%;
+        width: 15%;
         padding: 20px;
 }
 
@@ -38,7 +38,7 @@ body, .container {
 }
 
 .content {
-        width: 75%;
+        width: 60%;
         padding: 20px;
 }
 
@@ -71,6 +71,10 @@ a:visited {
 
 .contents {
         display: block;
+}
+
+img, p {
+        max-width: 50vw;
 }
 
 footer {
