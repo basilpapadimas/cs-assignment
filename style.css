@@ -78,7 +78,7 @@ a {
         margin-right: auto;
 }
 
-.content {
+.sidebar,.content {
         display: flex;
         flex-direction: column;
 }
@@ -96,6 +96,7 @@ footer {
         flex: 0 0 1vh;
         margin-top: auto;
         padding-bottom: 1vh;
+        margin-bottom: 3.5vh;
 }
 
 /* contact form */
