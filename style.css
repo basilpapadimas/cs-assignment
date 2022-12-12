@@ -5,6 +5,7 @@
 body {
         font-family: Helvetica, Arial, sans-serif;
         text-align: justify;
+        background-color: lightgray;
 }
 
 html {
@@ -20,6 +21,18 @@ body,
         width: 100%;
 }
 
+.centered{
+        top: 0;
+        left: 0;
+        bottom: 0;
+}
+
+#knight{
+        max-width: 20%;
+        display: block;
+        float: right;
+}
+
 /* flexbox */
 
 .container {
@@ -28,9 +41,17 @@ body,
         height: 100vh;
 }
 
+
+
 .sidebar {
-        width: 15%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 20%;
         padding: 20px;
+        background-color: grey;
+        height: 100vh;
 }
 
 .sidebar a {
@@ -128,4 +149,9 @@ button {
 }
 #img2{
         float: right;
+}
+
+iframe {
+        margin:auto;
+        min-height: 60%;
 }
