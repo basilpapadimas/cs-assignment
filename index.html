@@ -12,30 +12,30 @@
 
 	<link rel="icon" href="favicon.ico" type="image/x-icon" />
 
-<script>
+	<script>
 
-var x = setInterval(function() {
+		var x = setInterval(function () {
 
-  var days = Math.floor(((new Date("Dec 23, 2022 09:09:09").getTime()) - (new Date().getTime())) / (1000 * 60 * 60 * 24));
+			var days = Math.floor(((new Date("Dec 23, 2022 09:09:09").getTime()) - (new Date().getTime())) / (1000 * 60 * 60 * 24));
 
-  if (days <= 0) {
-    clearInterval(x);
-    document.getElementById("countdown").innerHTML = "Έχουμε ήδη αποχωρήσει!";
-  }
+			if (days <= 0) {
+				clearInterval(x);
+				document.getElementById("countdown").innerHTML = "Έχουμε ήδη αποχωρήσει!";
+			}
 
-  document.getElementById("countdown").innerHTML = "Αναχωρούμε στις 23 Δεκεμβρίου, δηλαδή σε " + days + " ημέρες!";
-}, 1000);
-</script>
+			document.getElementById("countdown").innerHTML = "Αναχωρούμε στις 23 Δεκεμβρίου, δηλαδή σε " + days + " ημέρες!";
+		}, 1000);
+	</script>
 
 </head>
 
 <body>
 	<div class="container">
 		<div class="sidebar">
-					<div class="centered">
-					<h1>Εκδρομή Σκακιστικού Όμιλου ΟΠΑ</h1>
-					<img id="knight" src="img/knight.png">
-					</div>
+			<div class="centered">
+				<h1>Εκδρομή Σκακιστικού Όμιλου ΟΠΑ</h1>
+				<img id="knight" src="img/knight.png">
+			</div>
 			<a href="index.html">Αρχική</a>
 			<a href="milano.html">Μιλάνο</a>
 			<a href="zürich.html">Ζυρίχη</a>
@@ -44,41 +44,44 @@ var x = setInterval(function() {
 		</div>
 		<div class="content">
 			<h1>Καλωσορίσατε!</h1>
-			<h3>Ο όμιλός μας, για να γιορτάσει τα Χριστούγεννα, οργανώνει μια εκδρομή σε τρεις πόλεις της Ευρώπης: <a href="milano.html">Μιλάνο</a>, <a href="zürich.html">Ζυρίχη</a> και <a href="münchen.html">Μόναχο</a>.</h3>
-			<h3>Θα περάσουμε 2 μέρες στην κάθε πόλη, επισκέπτοντας σημαντικά αξιοθέατα και λαμβάνοντας μέρος σε τοπικά τουρνουά σκακιού.</h3>
+			<h3>Ο όμιλός μας, για να γιορτάσει τα Χριστούγεννα, οργανώνει μια εκδρομή σε τρεις πόλεις της Ευρώπης: <a
+					href="milano.html">Μιλάνο</a>, <a href="zürich.html">Ζυρίχη</a> και <a
+					href="münchen.html">Μόναχο</a>.</h3>
+			<h3>Θα περάσουμε 2 μέρες στην κάθε πόλη, επισκέπτοντας σημαντικά αξιοθέατα και λαμβάνοντας μέρος σε τοπικά
+				τουρνουά σκακιού.</h3>
 			<table class="days days-container">
 				<thead>
-				  <tr>
-					<th class="days">Δευτέρα</th>
-					<th class="days">Τρίτη</th>
-					<th class="days">Τετάρτη</th>
-					<th class="days">Πέμπτη</th>
-					<th class="days">Παρασκευή</th>
-					<th class="days">Σάββατο</th>
-					<th class="days">Κυριακή</th>
-				  </tr>
+					<tr>
+						<th class="days">Δευτέρα</th>
+						<th class="days">Τρίτη</th>
+						<th class="days">Τετάρτη</th>
+						<th class="days">Πέμπτη</th>
+						<th class="days">Παρασκευή</th>
+						<th class="days">Σάββατο</th>
+						<th class="days">Κυριακή</th>
+					</tr>
 				</thead>
 				<tbody>
-				  <tr>
-					<td class="days"></td>
-					<td class="days"></td>
-					<td class="days"></td>
-					<td class="days"></td>
-					<td class="days">23<br>Μιλάνο I</td>
-					<td class="days">24<br>Μιλάνο II</td>
-					<td class="days">25<br>Ζυρίχη I</td>
-				  </tr>
-				  <tr>
-					<td class="days">26<br>Ζυρίχη II</td>
-					<td class="days">27<br><a href="münchen.html#münchen1">Μόναχο I</a></td>
-					<td class="days">28<br><a href="münchen.html#münchen2">Μόναχο II</a></td>
-					<td class="days"></td>
-					<td class="days"></td>
-					<td class="days"></td>
-					<td class="days"></td>
-				  </tr>
+					<tr>
+						<td class="days"></td>
+						<td class="days"></td>
+						<td class="days"></td>
+						<td class="days"></td>
+						<td class="days">23<br>Μιλάνο I</td>
+						<td class="days">24<br>Μιλάνο II</td>
+						<td class="days">25<br><a href="zürich.html#zurich1">Ζυρίχη I</a></td>
+					</tr>
+					<tr>
+						<td class="days">26<br><a href="zürich.html#zurich2"></a>Ζυρίχη II</a></td>
+						<td class="days">27<br><a href="münchen.html#münchen1">Μόναχο I</a></td>
+						<td class="days">28<br><a href="münchen.html#münchen2">Μόναχο II</a></td>
+						<td class="days"></td>
+						<td class="days"></td>
+						<td class="days"></td>
+						<td class="days"></td>
+					</tr>
 				</tbody>
-				</table>
+			</table>
 			<h3 id="countdown"></h3>
 			<footer>Αυτή η ιστοσελίδα υλοποιήθηκε από: 3220150, 3220145, Παναγιώτης Παπαγεωργίου.</footer>
 		</div>
