@@ -5,6 +5,7 @@
 body {
         font-family: Helvetica, Arial, sans-serif;
         text-align: justify;
+        background-color: lightgray;
 }
 
 html {
@@ -46,7 +47,7 @@ body,
         bottom: 0;
         width: 20%;
         padding: 20px;
-        background-color: lightgray;
+        background-color: grey;
         height: 100vh;
 }
 
@@ -61,10 +62,14 @@ body,
 }
 
 /* text-styling */
-a {
-        font-weight: bold;
-        text-decoration: underline;
+a:link {
         color: #000;
+        text-decoration: underline;
+}
+
+a:visited {
+        color: #000;
+        text-decoration: underline;
 }
 
 .days {
