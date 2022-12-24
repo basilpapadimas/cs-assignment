@@ -36,12 +36,22 @@ class csvrw:
                 pass
             reader = csv.reader(file)
             return list(reader)
+    def read_from_month(yy, mm):
+        all_events = csvrw.read()[1:]
+        events_this_month = []
+        #  [New Year's Eve] -> Date: 2022-12-31, Time: 23:59, Duration: 0
+        for event in all_events:
+                event_year, event_month, event_date, event_time, event_name, event_duration = int(event[0].split('-')[2]), int(event[0].split('-')[1]), str(event[0]), event[1], event[3], event[2]
+                if event_year == current_year and event_month == current_month:
+                    events_this_month.append(f"[{event_name}] -> Date: {event_date}, Time: {event_time}, Duration: {event_duration}")
+        print('\n'.join(events_this_month))
     def append(event_to_write):
         # TODO
         pass
     def change(event_to_write, event_to_replace):
         # TODO
         pass
+
 
 
 def generate_calendar(mm: int, yy: int):
@@ -91,6 +101,7 @@ def print_notifications():
     """Gets events and checks if they are today and after the current time and displays them in format
     [*] Notification: in {hh_till_event} hour(s) and {mins_till_event} minute(s) the programmed event '{sorted_event_names[i]}' will take place
     """
+    global current_year, current_month, current_day, current_hour, current_minutes
     current_year, current_month, current_day = [int(str(x)) for x in str(date.today()).split('-')]
     current_hour, current_minutes = [int(x) for x in hourtime.now().strftime("%H:%M").split(":")]
     current_time_in_secs = convert_hh_mm_to_seconds(f'{current_hour}:{current_minutes}')
@@ -127,3 +138,4 @@ if __name__=="__main__":
     print('\n')
     print(generate_calendar(1, 2022))
     print('\n')
+    csvrw.read_from_month(2022, 12)
