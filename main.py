@@ -55,12 +55,11 @@ def generate_calendar(mm: int, yy: int):
     NO DOCTESTS?
     """
 
-    separator = '─'*55
     calendar_string = f"""
-    {separator}
-       ｜{months[mm]} {yy}｜
-    {separator}
-    {'｜ '.join(days)}
+    {'─'*55}
+       ｜{[None, 'ΙΑΝ', 'ΦΕΒ', 'ΜΑΡ', 'ΑΠΡ', 'ΜΑΙ', 'ΙΟΥΝ', 'ΙΟΥΛ', 'ΑΥΓ', 'ΣΕΠ', 'ΟΚΤ', 'ΝΟΕ', 'ΔΕΚ'][mm]} {yy}｜
+    {'─'*55}
+    {'｜ '.join(['  ΔΕΥ', '  ΤΡΙ', '  ΤΕΤ', '  ΠΕΜ', '  ΠΑΡ', '  ΣΑΒ', '  ΚΥΡ'])}
     """
 
     last_days_of_last_month = [f"   {x}" for x in list(range(1, int(get_num_of_days(int(mm) -1 + 12*(1 if mm == 1 else 0) , yy)[1]) + 1))[-1 * int(get_num_of_days(mm, yy)[0]):]]
@@ -84,11 +83,16 @@ def generate_calendar(mm: int, yy: int):
 
     for line in [days_to_be_printed[x:x+7] for x in range(0, len(days_to_be_printed), 7)]:
         calendar_string += '｜ '.join(line) + "\n    "
-    calendar_string += separator
+    calendar_string += '─'*55
 
     return calendar_string
 
 def print_notifications():
+    current_year, current_month, current_day = [int(str(x)) for x in str(date.today()).split('-')]
+    current_hour, current_minutes = [int(x) for x in hourtime.now().strftime("%H:%M").split(":")]
+    current_time_in_secs = convert_hh_mm_to_seconds(f'{current_hour}:{current_minutes}')
+    # print(current_year, current_month, current_day, current_hour, current_minutes)
+
     events = csvrw.read()[1:]
     coming_event_hours = []
     coming_event_names = []
@@ -112,15 +116,6 @@ def print_notifications():
 # USER END
 
 if __name__=="__main__":
-
-    days = ['  ΔΕΥ', '  ΤΡΙ', '  ΤΕΤ', '  ΠΕΜ', '  ΠΑΡ', '  ΣΑΒ', '  ΚΥΡ']
-    months = [None, 'ΙΑΝ', 'ΦΕΒ', 'ΜΑΡ', 'ΑΠΡ', 'ΜΑΙ', 'ΙΟΥΝ', 'ΙΟΥΛ', 'ΑΥΓ', 'ΣΕΠ', 'ΟΚΤ', 'ΝΟΕ', 'ΔΕΚ']
-    current_year, current_month, current_day = [int(str(x)) for x in str(date.today()).split('-')]
-    current_hour, current_minutes = [int(x) for x in hourtime.now().strftime("%H:%M").split(":")]
-    current_time_in_secs = convert_hh_mm_to_seconds(f'{current_hour}:{current_minutes}')
-    # print(current_year, current_month, current_day, current_hour, current_minutes)
-
-
     # TODAY EVENTS NOTIFICATIONS
     print('\n')
     print_notifications()
