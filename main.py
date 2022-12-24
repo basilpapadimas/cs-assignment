@@ -4,11 +4,6 @@ from datetime import datetime as hourtime
 import datetime
 import csv
 
-days = ['  ΔΕΥ', '  ΤΡΙ', '  ΤΕΤ', '  ΠΕΜ', '  ΠΑΡ', '  ΣΑΒ', '  ΚΥΡ']
-months = [None, 'ΙΑΝ', 'ΦΕΒ', 'ΜΑΡ', 'ΑΠΡ', 'ΜΑΙ', 'ΙΟΥΝ', 'ΙΟΥΛ', 'ΑΥΓ', 'ΣΕΠ', 'ΟΚΤ', 'ΝΟΕ', 'ΔΕΚ']
-current_year, current_month, current_day = [int(str(x)) for x in str(date.today()).split('-')]
-current_hour, current_minutes = [int(x) for x in hourtime.now().strftime("%H:%M").split(":")]
-
 # print(current_year, current_month, current_day, current_hour, current_minutes)
 
 def get_num_of_days(mm, yy):
@@ -22,19 +17,18 @@ def convert_hh_mm_to_seconds(time_str):
     hh, mm = time_str.split(':')
     return int(hh) * 3600 + int(mm) * 60
 
-current_time_in_secs = convert_hh_mm_to_seconds(f'{current_hour}:{current_minutes}')
-
-def csv_read_write(rac=None, event_to_write=None, event_to_replce=None):
-    """WHEN r IS SELECTED IT READS THE CSV FILE AND RETURNS A LIST OF LIST OF THE LINES
+class csvrw:
+    
+    """read(): READS THE CSV FILE AND RETURNS A LIST OF LIST OF THE LINES
     [[LINE0 SPLITED IN COLLUMNS], [LINE1 SPLITED IN COLLUMNS], [LINE2 SPLITED IN COLLUMNS], ...]
     
-    WHEN a IS SELECTED  THE event_to_write PARAMETER REQUIRES A LIST OF ELEMENTS: [DATE, HOUR, DURATION, NAME]
+    append(): THE event_to_write PARAMETER REQUIRES A LIST OF ELEMENTS: [DATE, HOUR, DURATION, NAME]
     WHICH ARE GOING TO BE APPENDED TO THE FILE ACCORDING TO THEIR INDEX TO THE SPECIFIC COLUMN ON
     
-    WHEN c IS SELECTED  THE event_to_replace PARAMETER REQUIRES A LIST OF ELEMENTS: [DATE, HOUR, DURATION, NAME]
+    change(): THE event_to_replace PARAMETER REQUIRES A LIST OF ELEMENTS: [DATE, HOUR, DURATION, NAME]
     WHICH ALREADY EXISTS IN THE FILE WHICH IS GOING TO BE REPLACED BY THE event_to_write LIST
     """
-    if rac == 'r':
+    def read():
         with open('events.csv', 'r', newline='', encoding='cp1252') as file:
             leading_bytes = file.read(3)
 
@@ -44,12 +38,12 @@ def csv_read_write(rac=None, event_to_write=None, event_to_replce=None):
                 pass
             reader = csv.reader(file)
             return list(reader)
-    if rac == 'a':
-        # IMPLEMENTATION NEEDED
-        return 'APPENDING'
-    if rac == 'c':
-        # IMPLEMENTATION NEEDED
-        return 'CHANGING'
+    def append(event_to_write):
+        # TODO
+        pass
+    def change(event_to_write, event_to_replace):
+        # TODO
+        pass
 
 
 def generate_calendar(mm: int, yy: int):
@@ -62,23 +56,23 @@ def generate_calendar(mm: int, yy: int):
     so events = [[date1, hour1, duration1, title1], [date2, hour2, duration2, title2], ...]
     NO DOCTESTS?
     """
-    xwristiki_grammh = '─'*55
-    print(xwristiki_grammh)
-    print(f"   ｜{months[mm]} {yy}｜")
-    print(xwristiki_grammh)
-    print('｜ '.join(days))
-    # CHECKS IF MONTH IS JANUARY SO THE LAST MONTH IS DECEMBER (VALUE 12) AND NOT (VALUE -1)
-    if mm == 1:
-        last_days_of_last_month = [f"   {x}" for x in list(range(1, int(get_num_of_days(12, yy)[1]) + 1))[-1 * int(get_num_of_days(mm, yy)[0]):]]
-    else:
-        last_days_of_last_month = [f"   {x}" for x in list(range(1, int(get_num_of_days(int(mm) -1, yy)[1]) + 1))[-1 * int(get_num_of_days(mm, yy)[0]):]]
+
+    separator = '─'*55
+    calendar_string = f"""
+    {separator}
+       ｜{months[mm]} {yy}｜
+    {separator}
+    {'｜ '.join(days)}
+    """
+
+    last_days_of_last_month = [f"   {x}" for x in list(range(1, int(get_num_of_days(int(mm) -1 + 12*(1 if mm == 1 else 0) , yy)[1]) + 1))[-1 * int(get_num_of_days(mm, yy)[0]):]]
 
     days_of_given_mm = [f'[  {day}]' if len(str(day)) == 1 else f'[ {day}]' for day in list(range(1, get_num_of_days(mm, yy)[1] + 1))]
     
     first_days_of_next_month_needed_num = [f"    {x}" for x in list(range(1, 6 - datetime.datetime(yy, mm, int(days_of_given_mm[-1].replace('[ ', '').replace(']', ''))).weekday() + 1))]
     days_to_be_printed = last_days_of_last_month + days_of_given_mm + first_days_of_next_month_needed_num
 
-    events = csv_read_write('r')[1:]
+    events = csvrw.read()[1:]
     eventful_days = []
     for event in events:
         month = int(event[0].split('-')[1])
@@ -91,36 +85,47 @@ def generate_calendar(mm: int, yy: int):
                 days_to_be_printed[i] = f"[*{days_to_be_printed[i].replace('[ ', '').replace(']', '')}]" # CHANGES [ DAY] TO [*DAY]
 
     for line in [days_to_be_printed[x:x+7] for x in range(0, len(days_to_be_printed), 7)]:
-        print('｜ '.join(line))
-    print(xwristiki_grammh)
+        calendar_string += '｜ '.join(line) + "\n    "
+    calendar_string += separator
+
+    return calendar_string
 
 
 # USER END
 
-# TODAY EVENTS NOTIFICATIONS
-events = csv_read_write('r')[1:]
-coming_event_hours = []
-coming_event_names = []
-for event in events:
-    event_month, event_day, event_hour, event_name = int(event[0].split('-')[1]), int(event[0].split('-')[0]), event[1], event[3]
-    if event_month == current_month and event_day == current_day:
-        if int(event_hour.split(':')[0]) >= current_hour:
-            if int(event_hour.split(':')[1]) > current_hour:
-                coming_event_hours.append(event_hour)
-                coming_event_names.append(event_name)
+if __name__=="__main__":
 
-# SORING OF EVENTS
-time_in_sec_of_events = [convert_hh_mm_to_seconds(x) for x in coming_event_hours]
-sorted_time_in_sec_of_events, sorted_event_names = [list(x) for x in list(zip(*sorted(zip(time_in_sec_of_events, coming_event_names))))]
-sorted_time_in_hh_mm_of_events = [':'.join(str(timedelta(seconds=convert_hh_mm_to_seconds(x))).split(':')[:2]) for x in coming_event_hours]
+    days = ['  ΔΕΥ', '  ΤΡΙ', '  ΤΕΤ', '  ΠΕΜ', '  ΠΑΡ', '  ΣΑΒ', '  ΚΥΡ']
+    months = [None, 'ΙΑΝ', 'ΦΕΒ', 'ΜΑΡ', 'ΑΠΡ', 'ΜΑΙ', 'ΙΟΥΝ', 'ΙΟΥΛ', 'ΑΥΓ', 'ΣΕΠ', 'ΟΚΤ', 'ΝΟΕ', 'ΔΕΚ']
+    current_year, current_month, current_day = [int(str(x)) for x in str(date.today()).split('-')]
+    current_hour, current_minutes = [int(x) for x in hourtime.now().strftime("%H:%M").split(":")]
+    current_time_in_secs = convert_hh_mm_to_seconds(f'{current_hour}:{current_minutes}')
 
-print('\n')
-for i in range(len(sorted_event_names)):
-    hh_till_event, mins_till_event = str(timedelta(seconds=sorted_time_in_sec_of_events[i] - current_time_in_secs)).split(':')[:2]
-    print(f"[*] Notification: in {hh_till_event} hour(s) and {mins_till_event} minute(s) the programmed event '{sorted_event_names[i]}' will take place")
+    # TODAY EVENTS NOTIFICATIONS
+    events = csvrw.read()[1:]
+    coming_event_hours = []
+    coming_event_names = []
+    for event in events:
+        event_month, event_day, event_hour, event_name = int(event[0].split('-')[1]), int(event[0].split('-')[0]), event[1], event[3]
+        if event_month == current_month and event_day == current_day:
+            if int(event_hour.split(':')[0]) >= current_hour:
+                if int(event_hour.split(':')[1]) > current_hour:
+                    coming_event_hours.append(event_hour)
+                    coming_event_names.append(event_name)
 
-# NAVIGATING MONTHS 
+    # SORING OF EVENTS
+    time_in_sec_of_events = [convert_hh_mm_to_seconds(x) for x in coming_event_hours]
+    sorted_time_in_sec_of_events, sorted_event_names = [list(x) for x in list(zip(*sorted(zip(time_in_sec_of_events, coming_event_names))))]
+    sorted_time_in_hh_mm_of_events = [':'.join(str(timedelta(seconds=convert_hh_mm_to_seconds(x))).split(':')[:2]) for x in coming_event_hours]
 
-print('\n')
-generate_calendar(12, 2022)
-print('\n')
+    print('\n')
+    print(sorted_time_in_sec_of_events, sorted_event_names)
+    for i in range(len(sorted_event_names)):
+        hh_till_event, mins_till_event = str(timedelta(seconds=sorted_time_in_sec_of_events[i] - current_time_in_secs)).split(':')[:2]
+        print(f"[*] Notification: in {hh_till_event} hour(s) and {mins_till_event} minute(s) the programmed event '{sorted_event_names[i]}' will take place")
+
+    # NAVIGATING MONTHS 
+
+    print('\n')
+    print(generate_calendar(1, 2023))
+    print('\n')
