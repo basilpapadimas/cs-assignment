@@ -4,8 +4,6 @@ from datetime import datetime as hourtime
 import datetime
 import csv
 
-# print(current_year, current_month, current_day, current_hour, current_minutes)
-
 def get_num_of_days(mm, yy):
     """Returns a tuple of type (weekday of first day of the month, number of days in given month)
     DOCTESTS LATER TO BE ADDED"""
@@ -57,12 +55,11 @@ def generate_calendar(mm: int, yy: int):
     NO DOCTESTS?
     """
 
-    separator = '─'*55
     calendar_string = f"""
-    {separator}
-       ｜{months[mm]} {yy}｜
-    {separator}
-    {'｜ '.join(days)}
+    {'─'*55}
+       ｜{[None, 'ΙΑΝ', 'ΦΕΒ', 'ΜΑΡ', 'ΑΠΡ', 'ΜΑΙ', 'ΙΟΥΝ', 'ΙΟΥΛ', 'ΑΥΓ', 'ΣΕΠ', 'ΟΚΤ', 'ΝΟΕ', 'ΔΕΚ'][mm]} {yy}｜
+    {'─'*55}
+    {'｜ '.join(['  ΔΕΥ', '  ΤΡΙ', '  ΤΕΤ', '  ΠΕΜ', '  ΠΑΡ', '  ΣΑΒ', '  ΚΥΡ'])}
     """
 
     last_days_of_last_month = [f"   {x}" for x in list(range(1, int(get_num_of_days(int(mm) -1 + 12*(1 if mm == 1 else 0) , yy)[1]) + 1))[-1 * int(get_num_of_days(mm, yy)[0]):]]
@@ -86,22 +83,16 @@ def generate_calendar(mm: int, yy: int):
 
     for line in [days_to_be_printed[x:x+7] for x in range(0, len(days_to_be_printed), 7)]:
         calendar_string += '｜ '.join(line) + "\n    "
-    calendar_string += separator
+    calendar_string += '─'*55
 
     return calendar_string
 
-
-# USER END
-
-if __name__=="__main__":
-
-    days = ['  ΔΕΥ', '  ΤΡΙ', '  ΤΕΤ', '  ΠΕΜ', '  ΠΑΡ', '  ΣΑΒ', '  ΚΥΡ']
-    months = [None, 'ΙΑΝ', 'ΦΕΒ', 'ΜΑΡ', 'ΑΠΡ', 'ΜΑΙ', 'ΙΟΥΝ', 'ΙΟΥΛ', 'ΑΥΓ', 'ΣΕΠ', 'ΟΚΤ', 'ΝΟΕ', 'ΔΕΚ']
+def print_notifications():
     current_year, current_month, current_day = [int(str(x)) for x in str(date.today()).split('-')]
     current_hour, current_minutes = [int(x) for x in hourtime.now().strftime("%H:%M").split(":")]
     current_time_in_secs = convert_hh_mm_to_seconds(f'{current_hour}:{current_minutes}')
+    # print(current_year, current_month, current_day, current_hour, current_minutes)
 
-    # TODAY EVENTS NOTIFICATIONS
     events = csvrw.read()[1:]
     coming_event_hours = []
     coming_event_names = []
@@ -111,18 +102,23 @@ if __name__=="__main__":
             if int(event_hour.split(':')[0]) >= current_hour:
                 if int(event_hour.split(':')[1]) > current_hour:
                     coming_event_hours.append(event_hour)
-                    coming_event_names.append(event_name)
-
-    # SORING OF EVENTS
+                    coming_event_names.append(event_name)    
+    # SORTING OF EVENTS
     time_in_sec_of_events = [convert_hh_mm_to_seconds(x) for x in coming_event_hours]
     sorted_time_in_sec_of_events, sorted_event_names = [list(x) for x in list(zip(*sorted(zip(time_in_sec_of_events, coming_event_names))))]
-    sorted_time_in_hh_mm_of_events = [':'.join(str(timedelta(seconds=convert_hh_mm_to_seconds(x))).split(':')[:2]) for x in coming_event_hours]
-
-    print('\n')
-    print(sorted_time_in_sec_of_events, sorted_event_names)
+    # sorted_time_in_hh_mm_of_events = [':'.join(str(timedelta(seconds=convert_hh_mm_to_seconds(x))).split(':')[:2]) for x in coming_event_hours]
+    
     for i in range(len(sorted_event_names)):
         hh_till_event, mins_till_event = str(timedelta(seconds=sorted_time_in_sec_of_events[i] - current_time_in_secs)).split(':')[:2]
         print(f"[*] Notification: in {hh_till_event} hour(s) and {mins_till_event} minute(s) the programmed event '{sorted_event_names[i]}' will take place")
+
+
+# USER END
+
+if __name__=="__main__":
+    # TODAY EVENTS NOTIFICATIONS
+    print('\n')
+    print_notifications()
 
     # NAVIGATING MONTHS 
 
