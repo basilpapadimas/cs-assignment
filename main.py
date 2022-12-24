@@ -24,16 +24,6 @@ class CSVrw:
 
             return list(map(lambda x: Event(list(map(lambda x: int(x), x[0].split('-'))) + list(map(lambda x: int(x), x[1].split(':'))) + [int(x[2])] + [x[3]]), list(csv.reader(file))[1:]))
 
-    def read_from_month(yy, mm):
-        all_events = CSVrw.read()[1:]
-        events_this_month = []
-        #  [New Year's Eve] -> Date: 2022-12-31, Time: 23:59, Duration: 0
-        for event in all_events:
-                event_year, event_month, event_date, event_time, event_name, event_duration = int(event[0].split('-')[2]), int(event[0].split('-')[1]), str(event[0]), event[1], event[3], event[2]
-                if event_year == current_year and event_month == current_month:
-                    events_this_month.append(f"[{event_name}] -> Date: {event_date}, Time: {event_time}, Duration: {event_duration}")
-        print('\n'.join(events_this_month))
-
     def append(event_to_write):
         # TODO
         pass
@@ -62,6 +52,11 @@ class Month:
     def addEvent(self, newevent):
         self.events.append(newevent)
         self.events.sort(key=lambda x: x.startdate)
+
+    def printEvents(self):
+    #  [New Year's Eve] -> Date: 2022-12-31, Time: 23:59, Duration: 0
+        for event in self.events:
+            print(f"[{event.title}] -> Date: {str(event.year)}-{str(event.month)}-{str(event.day)}, Time: {str(event.hour)}:{str(event.minutes)}, Duration: {str(event.duration)}")
 
 def initialize(file="events.csv"):
     global years
@@ -156,4 +151,4 @@ if __name__=="__main__":
     print('\n')
     print(generate_calendar(12, 2022))
     print('\n')
-    #CSVrw.read_from_month(2022, 12) NEEDS PORTING
+    years[2022][12].printEvents()
