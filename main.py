@@ -48,9 +48,12 @@ class Month:
         #self.events.sort(key=lambda x: x.startdate)
 
     def printEvents(self):
-    #  [New Year's Eve] -> Date: 2022-12-31, Time: 23:59, Duration: 0
+    # 0. [New Year's Eve] -> Date: 2022-12-31, Time: 23:59, Duration: 0
+        counter = 0
         for event in self.events:
-            print(f"[{event.title}] -> Date: {str(event.year)}-{str(event.month)}-{str(event.day)}, Time: {str(event.hour)}:{str(event.minutes)}, Duration: {str(event.duration)}")
+            print(f"{counter}. [{event.title}] -> Date: {str(event.year)}-{str(event.month)}-{str(event.day)}, Time: {str(event.hour)}:{str(event.minutes)}, Duration: {str(event.duration)}")
+            counter += 1
+        return self.events
 
 def initialize(file="events.csv"):
     global years
@@ -130,19 +133,43 @@ def print_notifications():
         delta = event.startdate - timedelta(hours=now.hour, minutes=now.minute)
         print(f"[*] Notification: in {delta.hour} hour(s) and {delta.minute} minute(s) the programmed event '{event.title}' will take place")
 
+def repl():
+    mm, yyyy = datetime.now().month, datetime.now().year
+    print(generate_calendar(mm, yyyy))
 
-# USER END
+    while True:
+        choice = input('''
+    Πατήστε ENTER για προβολή του επόμενου μήνα, "q" για έξοδο ή κάποια από τις παρακάτω επιλογές:
+        "-" για πλοήγηση στον προηγούμενο μήνα
+        "+" για διαχείριση των γεγονότων του ημερολογίου
+        "*" για εμφάνιση των γεγονότων ενός επιλεγμένου μήνα
+    -> ''')
+        
+        match choice: #requires Py3.10
+            case "":
+                mm, yyyy = mm%12 + 1, yyyy + 1*(mm==12)
+                print(generate_calendar(mm, yyyy))
+            case "-":
+                mm, yyyy = mm - 1 + 12*(mm==1), yyyy - 1*(mm==1)
+                print(generate_calendar(mm, yyyy))
+            case "+":
+                print("=== Αναζήτηση γεγονότων ===")
+                event = years[int(input("Εισάγετε έτος: "))][int(input("Εισάγετε μήνα: "))].printEvents()[int(input("Επιλέξτε γεγονός προς ενημέρωση: "))]
+                event.year, event.month, event.day, event.hour, event.minutes, event.duration,event.title = *list(map(lambda x: int(x), input(f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ").split("-"))), *list(map(lambda x: int(x), input(f"Ώρα γεγονότος ({event.hour}-{event.minutes}): ").split("-"))), int(input(f"Διάρκεια γεγονότος ({event.duration}): ")), input(f"Τίτλος γεγονότος ({event.title}): ")
+                print(f"Το γεγονός ενημερώθηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
+            case "*":
+                print("=== Αναζήτηση γεγονότων ===")
+                years[int(input("Εισάγετε έτος: "))][int(input("Εισάγετε μήνα: "))].printEvents()
+                input("Πατήστε οποιοδήποτε χαρακτήρα για επιστροφή στο κυρίως μενού: ")
+                print(generate_calendar(mm, yyyy))
+            case "q":
+                raise SystemExit(0)
 
 if __name__=="__main__":
     initialize()
 
-    # TODAY EVENTS NOTIFICATIONS
     print('\n')
     print_notifications()
-
-    # NAVIGATING MONTHS 
-
     print('\n')
-    print(generate_calendar(12, 2022))
-    print('\n')
-    years[2022][12].printEvents()
+
+    repl()
