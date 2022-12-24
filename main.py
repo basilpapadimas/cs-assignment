@@ -100,8 +100,6 @@ def generate_calendar(mm: int, yyyy: int):
             mm) - 1 + 12*(1 if mm == 1 else 0), yyyy)[1]) + 1))[-1 * int(get_num_of_days(mm, yyyy)[0]):]]
     else:
         last_days_of_last_month = []
-    print(monthrange(yyyy, mm))
-    print(last_days_of_last_month)
 
     days_of_given_mm = [f'[  {day}]' if len(str(day)) == 1 else f'[ {day}]' for day in list(
         range(1, get_num_of_days(mm, yyyy)[1] + 1))]
