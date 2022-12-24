@@ -1,5 +1,5 @@
 from calendar import monthrange
-from datetime import date, timedelta, datetime
+from datetime import timedelta, datetime
 import csv
 
 class CSVrw:
@@ -33,13 +33,7 @@ class CSVrw:
 
 class Event:
     def __init__(self, ls):
-        self.day = ls[0]
-        self.month = ls[1]
-        self.year = ls[2]
-        self.hour = ls[3]
-        self.minutes = ls[4]
-        self.duration = ls[5]
-        self.title = ls[6]
+        self.day, self.month, self.year, self.hour, self.minutes, self.duration, self.title = ls
         self.startdate = datetime(self.year, self.month, self.day, self.hour, self.minutes)
         self.enddate = self.startdate+timedelta(minutes=self.duration)
 
@@ -51,7 +45,7 @@ class Month:
 
     def addEvent(self, newevent):
         self.events.append(newevent)
-        self.events.sort(key=lambda x: x.startdate)
+        #self.events.sort(key=lambda x: x.startdate)
 
     def printEvents(self):
     #  [New Year's Eve] -> Date: 2022-12-31, Time: 23:59, Duration: 0
@@ -129,7 +123,7 @@ def print_notifications():
 
     coming_events = []
     for event in years[now.year][now.month].events:
-        if event.day == now.day and event.hour >= now.hour and event.minutes > now.minute : # checks if the event is today  
+        if event.day == now.day and event.startdate > now: # checks if the event is today
             coming_events.append(event)
     
     for event in coming_events:
