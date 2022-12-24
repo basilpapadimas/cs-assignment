@@ -2,13 +2,14 @@ from calendar import monthrange
 from datetime import timedelta, datetime
 import csv
 
+
 class CSVrw:
     """read(): READS THE CSV FILE AND RETURNS A LIST OF LIST OF THE LINES
     [[LINE0 SPLITED IN COLLUMNS], [LINE1 SPLITED IN COLLUMNS], [LINE2 SPLITED IN COLLUMNS], ...]
-    
+
     append(): THE event_to_write PARAMETER REQUIRES A LIST OF ELEMENTS: [DATE, HOUR, DURATION, NAME]
     WHICH ARE GOING TO BE APPENDED TO THE FILE ACCORDING TO THEIR INDEX TO THE SPECIFIC COLUMN ON
-    
+
     change(): THE event_to_replace PARAMETER REQUIRES A LIST OF ELEMENTS: [DATE, HOUR, DURATION, NAME]
     WHICH ALREADY EXISTS IN THE FILE WHICH IS GOING TO BE REPLACED BY THE event_to_write LIST
     """
@@ -27,15 +28,19 @@ class CSVrw:
     def append(event_to_write):
         # TODO
         pass
+
     def change(event_to_write, event_to_replace):
         # TODO
         pass
 
+
 class Event:
     def __init__(self, ls):
         self.day, self.month, self.year, self.hour, self.minutes, self.duration, self.title = ls
-        self.startdate = datetime(self.year, self.month, self.day, self.hour, self.minutes)
+        self.startdate = datetime(
+            self.year, self.month, self.day, self.hour, self.minutes)
         self.enddate = self.startdate+timedelta(minutes=self.duration)
+
 
 class Month:
     def __init__(self, mm: int, yyyy: int):
@@ -48,12 +53,13 @@ class Month:
         #self.events.sort(key=lambda x: x.startdate)
 
     def printEvents(self):
-    # 0. [New Year's Eve] -> Date: 2022-12-31, Time: 23:59, Duration: 0
+        # 0. [New Year's Eve] -> Date: 2022-12-31, Time: 23:59, Duration: 0
         counter = 0
         for event in self.events:
             print(f"{counter}. [{event.title}] -> Date: {str(event.year)}-{str(event.month)}-{str(event.day)}, Time: {str(event.hour)}:{str(event.minutes)}, Duration: {str(event.duration)}")
             counter += 1
         return self.events
+
 
 def initialize(file="events.csv"):
     global years
@@ -63,7 +69,7 @@ def initialize(file="events.csv"):
 
     for event in events:
         if event.year not in years.keys():
-            years[event.year] = {x:Month(x, event.year) for x in range(1, 13)}
+            years[event.year] = {x: Month(x, event.year) for x in range(1, 13)}
         years[event.year][event.month].addEvent(event)
 
 
@@ -90,12 +96,16 @@ def generate_calendar(mm: int, yyyy: int):
     {'｜ '.join(['  ΔΕΥ', '  ΤΡΙ', '  ΤΕΤ', '  ΠΕΜ', '  ΠΑΡ', '  ΣΑΒ', '  ΚΥΡ'])}
     """
 
-    last_days_of_last_month = [f"   {x}" for x in list(range(1, int(get_num_of_days(int(mm) -1 + 12*(1 if mm == 1 else 0) , yyyy)[1]) + 1))[-1 * int(get_num_of_days(mm, yyyy)[0]):]]
+    last_days_of_last_month = [f"   {x}" for x in list(range(1, int(get_num_of_days(int(
+        mm) - 1 + 12*(1 if mm == 1 else 0), yyyy)[1]) + 1))[-1 * int(get_num_of_days(mm, yyyy)[0]):]]
 
-    days_of_given_mm = [f'[  {day}]' if len(str(day)) == 1 else f'[ {day}]' for day in list(range(1, get_num_of_days(mm, yyyy)[1] + 1))]
-    
-    first_days_of_next_month_needed_num = [f"    {x}" for x in list(range(1, 6 - datetime(yyyy, mm, int(days_of_given_mm[-1].replace('[ ', '').replace(']', ''))).weekday() + 1))]
-    days_to_be_printed = last_days_of_last_month + days_of_given_mm + first_days_of_next_month_needed_num
+    days_of_given_mm = [f'[  {day}]' if len(str(day)) == 1 else f'[ {day}]' for day in list(
+        range(1, get_num_of_days(mm, yyyy)[1] + 1))]
+
+    first_days_of_next_month_needed_num = [f"    {x}" for x in list(range(
+        1, 6 - datetime(yyyy, mm, int(days_of_given_mm[-1].replace('[ ', '').replace(']', ''))).weekday() + 1))]
+    days_to_be_printed = last_days_of_last_month + \
+        days_of_given_mm + first_days_of_next_month_needed_num
 
     eventful_days = set()
     for event in years[yyyy][mm].events:
@@ -103,15 +113,18 @@ def generate_calendar(mm: int, yyyy: int):
             eventful_days.add(event.day)
 
     for i in range(len(days_to_be_printed)):
-        if '[' in days_to_be_printed[i]: # CHECKS IF DATE IS FROM MONTH SELECTED
-            if int(days_to_be_printed[i].replace('[ ', '').replace(']', '')) in eventful_days:           #CHECKS IF DAY HAS AT LEAST ONE EVENT
-                days_to_be_printed[i] = f"[*{days_to_be_printed[i].replace('[ ', '').replace(']', '')}]" # CHANGES [ DAY] TO [*DAY]
+        if '[' in days_to_be_printed[i]:  # CHECKS IF DATE IS FROM MONTH SELECTED
+            # CHECKS IF DAY HAS AT LEAST ONE EVENT
+            if int(days_to_be_printed[i].replace('[ ', '').replace(']', '')) in eventful_days:
+                # CHANGES [ DAY] TO [*DAY]
+                days_to_be_printed[i] = f"[*{days_to_be_printed[i].replace('[ ', '').replace(']', '')}]"
 
     for line in [days_to_be_printed[x:x+7] for x in range(0, len(days_to_be_printed), 7)]:
         calendar_string += '｜ '.join(line) + "\n    "
     calendar_string += '─'*55
 
     return calendar_string
+
 
 def print_notifications():
     """Gets events and checks if they are today and after the current time and displays them in format
@@ -126,12 +139,14 @@ def print_notifications():
 
     coming_events = []
     for event in years[now.year][now.month].events:
-        if event.day == now.day and event.startdate > now: # checks if the event is today
+        if event.day == now.day and event.startdate > now:  # checks if the event is today
             coming_events.append(event)
-    
+
     for event in coming_events:
         delta = event.startdate - timedelta(hours=now.hour, minutes=now.minute)
-        print(f"[*] Notification: in {delta.hour} hour(s) and {delta.minute} minute(s) the programmed event '{event.title}' will take place")
+        print(
+            f"[*] Notification: in {delta.hour} hour(s) and {delta.minute} minute(s) the programmed event '{event.title}' will take place")
+
 
 def repl():
     mm, yyyy = datetime.now().month, datetime.now().year
@@ -144,28 +159,33 @@ def repl():
         "+" για διαχείριση των γεγονότων του ημερολογίου
         "*" για εμφάνιση των γεγονότων ενός επιλεγμένου μήνα
     -> ''')
-        
-        match choice: #requires Py3.10
+
+        match choice:  # requires Py3.10
             case "":
-                mm, yyyy = mm%12 + 1, yyyy + 1*(mm==12)
+                mm, yyyy = mm % 12 + 1, yyyy + 1*(mm == 12)
                 print(generate_calendar(mm, yyyy))
             case "-":
-                mm, yyyy = mm - 1 + 12*(mm==1), yyyy - 1*(mm==1)
+                mm, yyyy = mm - 1 + 12*(mm == 1), yyyy - 1*(mm == 1)
                 print(generate_calendar(mm, yyyy))
             case "+":
                 print("=== Αναζήτηση γεγονότων ===")
-                event = years[int(input("Εισάγετε έτος: "))][int(input("Εισάγετε μήνα: "))].printEvents()[int(input("Επιλέξτε γεγονός προς ενημέρωση: "))]
-                event.year, event.month, event.day, event.hour, event.minutes, event.duration,event.title = *list(map(lambda x: int(x), input(f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ").split("-"))), *list(map(lambda x: int(x), input(f"Ώρα γεγονότος ({event.hour}-{event.minutes}): ").split("-"))), int(input(f"Διάρκεια γεγονότος ({event.duration}): ")), input(f"Τίτλος γεγονότος ({event.title}): ")
-                print(f"Το γεγονός ενημερώθηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
+                event = years[int(input("Εισάγετε έτος: "))][int(input("Εισάγετε μήνα: "))].printEvents()[
+                    int(input("Επιλέξτε γεγονός προς ενημέρωση: "))]
+                event.year, event.month, event.day, event.hour, event.minutes, event.duration, event.title = *list(map(lambda x: int(x), input(f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ").split(
+                    "-"))), *list(map(lambda x: int(x), input(f"Ώρα γεγονότος ({event.hour}-{event.minutes}): ").split("-"))), int(input(f"Διάρκεια γεγονότος ({event.duration}): ")), input(f"Τίτλος γεγονότος ({event.title}): ")
+                print(
+                    f"Το γεγονός ενημερώθηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
             case "*":
                 print("=== Αναζήτηση γεγονότων ===")
-                years[int(input("Εισάγετε έτος: "))][int(input("Εισάγετε μήνα: "))].printEvents()
+                years[int(input("Εισάγετε έτος: "))][int(
+                    input("Εισάγετε μήνα: "))].printEvents()
                 input("Πατήστε οποιοδήποτε χαρακτήρα για επιστροφή στο κυρίως μενού: ")
                 print(generate_calendar(mm, yyyy))
             case "q":
                 raise SystemExit(0)
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     initialize()
 
     print('\n')
