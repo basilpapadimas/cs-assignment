@@ -44,9 +44,9 @@ class Event:
         self.enddate = self.startdate+timedelta(minutes=self.duration)
 
 class Month:
-    def __init__(self, mm: int, yy: int):
+    def __init__(self, mm: int, yyyy: int):
         self.month = mm
-        self.year = yy
+        self.year = yyyy
         self.events = []
 
     def addEvent(self, newevent):
