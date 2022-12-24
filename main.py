@@ -109,8 +109,7 @@ def generate_calendar(mm: int, yyyy: int):
 
     eventful_days = set()
     for event in years[yyyy][mm].events:
-        if event == mm:
-            eventful_days.add(event.day)
+        eventful_days.add(event.day)
 
     for i in range(len(days_to_be_printed)):
         if '[' in days_to_be_printed[i]:  # CHECKS IF DATE IS FROM MONTH SELECTED
