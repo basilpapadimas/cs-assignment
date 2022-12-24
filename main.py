@@ -155,11 +155,11 @@ def repl():
 
     while True:
         choice = input('''
-    Πατήστε ENTER για προβολή του επόμενου μήνα, "q" για έξοδο ή κάποια από τις παρακάτω επιλογές:
-        "-" για πλοήγηση στον προηγούμενο μήνα
-        "+" για διαχείριση των γεγονότων του ημερολογίου
-        "*" για εμφάνιση των γεγονότων ενός επιλεγμένου μήνα
-    -> ''')
+        Πατήστε ENTER για προβολή του επόμενου μήνα, "q" για έξοδο ή κάποια από τις παρακάτω επιλογές:
+            "-" για πλοήγηση στον προηγούμενο μήνα
+            "+" για διαχείριση των γεγονότων του ημερολογίου
+            "*" για εμφάνιση των γεγονότων ενός επιλεγμένου μήνα
+            -> ''')
 
         match choice:  # requires Py3.10
             case "":
@@ -169,13 +169,30 @@ def repl():
                 mm, yyyy = mm - 1 + 12*(mm == 1), yyyy - 1*(mm == 1)
                 print(generate_calendar(mm, yyyy))
             case "+":
-                print("=== Αναζήτηση γεγονότων ===")
-                event = years[int(input("Εισάγετε έτος: "))][int(input("Εισάγετε μήνα: "))].printEvents()[
-                    int(input("Επιλέξτε γεγονός προς ενημέρωση: "))]
-                event.year, event.month, event.day, event.hour, event.minutes, event.duration, event.title = *list(map(lambda x: int(x), input(f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ").split(
-                    "-"))), *list(map(lambda x: int(x), input(f"Ώρα γεγονότος ({event.hour}-{event.minutes}): ").split("-"))), int(input(f"Διάρκεια γεγονότος ({event.duration}): ")), input(f"Τίτλος γεγονότος ({event.title}): ")
-                print(
-                    f"Το γεγονός ενημερώθηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
+                while True:
+                    choice2 = input('''
+    Διαχείριση γεγονότων ημερολογίου, επιλέξτε ενέργεια:
+        1 Καταγραφή νέου γεγονότος
+        2 Διαγραφή γεγονότος
+        3 Ενημέρωση γεγονότος
+        0 Επιστροφή στο κυρίως μενού
+        -> ''')
+                    match choice2:
+                        case "0":
+                            break
+                        case "1":  # TODO
+                            break
+                        case "2":  # TODO
+                            break
+                        case "3":  # TODO
+                            print("=== Αναζήτηση γεγονότων ===")
+                            event = years[int(input("Εισάγετε έτος: "))][int(input("Εισάγετε μήνα: "))].printEvents()[
+                                int(input("Επιλέξτε γεγονός προς ενημέρωση: "))]
+                            event.year, event.month, event.day, event.hour, event.minutes, event.duration, event.title = *list(map(lambda x: int(x), input(f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ").split(
+                                "-"))), *list(map(lambda x: int(x), input(f"Ώρα γεγονότος ({event.hour}-{event.minutes}): ").split("-"))), int(input(f"Διάρκεια γεγονότος ({event.duration}): ")), input(f"Τίτλος γεγονότος ({event.title}): ")
+                            print(
+                                f"Το γεγονός ενημερώθηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
+                            break
             case "*":
                 print("=== Αναζήτηση γεγονότων ===")
                 years[int(input("Εισάγετε έτος: "))][int(
