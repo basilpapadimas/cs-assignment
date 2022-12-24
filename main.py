@@ -106,8 +106,8 @@ if __name__=="__main__":
     coming_event_hours = []
     coming_event_names = []
     for event in events:
-        event_month, event_day, event_hour, event_name = int(event[0].split('-')[1]), int(event[0].split('-')[0]), event[1], event[3]
-        if event_month == current_month and event_day == current_day:
+        event_year, event_month, event_day, event_hour, event_name = int(event[0].split('-')[2]), int(event[0].split('-')[1]), int(event[0].split('-')[0]), event[1], event[3]
+        if event_year == current_year and event_month == current_month and event_day == current_day:
             if int(event_hour.split(':')[0]) >= current_hour:
                 if int(event_hour.split(':')[1]) > current_hour:
                     coming_event_hours.append(event_hour)
@@ -127,5 +127,5 @@ if __name__=="__main__":
     # NAVIGATING MONTHS 
 
     print('\n')
-    print(generate_calendar(1, 2023))
+    print(generate_calendar(1, 2022))
     print('\n')
