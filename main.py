@@ -4,18 +4,7 @@ from datetime import datetime as hourtime
 import datetime
 import csv
 
-def get_num_of_days(mm, yy):
-    """Returns a tuple of type (weekday of first day of the month, number of days in given month)
-    DOCTESTS LATER TO BE ADDED"""
-    return monthrange(yy, mm)
-
-def convert_hh_mm_to_seconds(time_str):
-    """CONVERTS HOUR TIME OF TYPE HH:MM TO seconds for easier sorting
-    DOCTESTS LATER TO BE ADDED"""
-    hh, mm = time_str.split(':')
-    return int(hh) * 3600 + int(mm) * 60
-
-class csvrw:
+class CSVrw:
     
     """read(): READS THE CSV FILE AND RETURNS A LIST OF LIST OF THE LINES
     [[LINE0 SPLITED IN COLLUMNS], [LINE1 SPLITED IN COLLUMNS], [LINE2 SPLITED IN COLLUMNS], ...]
@@ -26,22 +15,43 @@ class csvrw:
     change(): THE event_to_replace PARAMETER REQUIRES A LIST OF ELEMENTS: [DATE, HOUR, DURATION, NAME]
     WHICH ALREADY EXISTS IN THE FILE WHICH IS GOING TO BE REPLACED BY THE event_to_write LIST
     """
-    def read():
-        with open('events.csv', 'r', newline='', encoding='cp1252') as file:
+    def read(filename):
+        with open(filename, 'r', newline='', encoding='cp1252') as file:
             leading_bytes = file.read(3)
 
             if (leading_bytes != 'ï»¿'):
                 file.seek(0)
             else:
                 pass
-            reader = csv.reader(file)
-            return list(reader)
+            return list(map(lambda x: x[0].split('-') + x[1:], csv.reader(file)))[1:]
     def append(event_to_write):
         # TODO
         pass
     def change(event_to_write, event_to_replace):
         # TODO
         pass
+
+class Month:
+    def __init__(self, mm: int, yy: int):
+        self.month = mm
+        self.year = yy
+
+    def addEvent():
+        pass
+
+    def events():
+        pass
+
+
+def initialize(file="events.csv"):
+    global years
+    years = {}
+
+    events = CSVrw.read(file)
+
+    for event in events:
+        if event[2] not in years.keys():
+            
 
 
 def generate_calendar(mm: int, yy: int):
@@ -54,6 +64,11 @@ def generate_calendar(mm: int, yy: int):
     so events = [[date1, hour1, duration1, title1], [date2, hour2, duration2, title2], ...]
     NO DOCTESTS?
     """
+
+    def get_num_of_days(mm, yy):
+        """Returns a tuple of type (weekday of first day of the month, number of days in given month)
+        DOCTESTS LATER TO BE ADDED"""
+        return monthrange(yy, mm)
 
     calendar_string = f"""
     {'─'*55}
@@ -69,7 +84,8 @@ def generate_calendar(mm: int, yy: int):
     first_days_of_next_month_needed_num = [f"    {x}" for x in list(range(1, 6 - datetime.datetime(yy, mm, int(days_of_given_mm[-1].replace('[ ', '').replace(']', ''))).weekday() + 1))]
     days_to_be_printed = last_days_of_last_month + days_of_given_mm + first_days_of_next_month_needed_num
 
-    events = csvrw.read()[1:]
+    events = CSVrw.read('events.csv')[1:]
+    print(events)
     eventful_days = []
     for event in events:
         month = int(event[0].split('-')[1])
@@ -88,12 +104,18 @@ def generate_calendar(mm: int, yy: int):
     return calendar_string
 
 def print_notifications():
+    def convert_hh_mm_to_seconds(time_str):
+        """CONVERTS HOUR TIME OF TYPE HH:MM TO seconds for easier sorting
+        DOCTESTS LATER TO BE ADDED"""
+        hh, mm = time_str.split(':')
+        return int(hh) * 3600 + int(mm) * 60
+
     current_year, current_month, current_day = [int(str(x)) for x in str(date.today()).split('-')]
     current_hour, current_minutes = [int(x) for x in hourtime.now().strftime("%H:%M").split(":")]
     current_time_in_secs = convert_hh_mm_to_seconds(f'{current_hour}:{current_minutes}')
     # print(current_year, current_month, current_day, current_hour, current_minutes)
 
-    events = csvrw.read()[1:]
+    events = CSVrw.read('events.csv')[1:]
     coming_event_hours = []
     coming_event_names = []
     for event in events:
@@ -123,5 +145,5 @@ if __name__=="__main__":
     # NAVIGATING MONTHS 
 
     print('\n')
-    print(generate_calendar(1, 2022))
+    print(generate_calendar(12, 2022))
     print('\n')
