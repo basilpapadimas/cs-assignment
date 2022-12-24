@@ -24,6 +24,15 @@ class CSVrw:
             else:
                 pass
             return list(map(lambda x: x[0].split('-') + x[1:], csv.reader(file)))[1:]
+    def read_from_month(yy, mm):
+        all_events = csvrw.read()[1:]
+        events_this_month = []
+        #  [New Year's Eve] -> Date: 2022-12-31, Time: 23:59, Duration: 0
+        for event in all_events:
+                event_year, event_month, event_date, event_time, event_name, event_duration = int(event[0].split('-')[2]), int(event[0].split('-')[1]), str(event[0]), event[1], event[3], event[2]
+                if event_year == current_year and event_month == current_month:
+                    events_this_month.append(f"[{event_name}] -> Date: {event_date}, Time: {event_time}, Duration: {event_duration}")
+        print('\n'.join(events_this_month))
     def append(event_to_write):
         # TODO
         pass
@@ -94,7 +103,7 @@ def generate_calendar(mm: int, yy: int):
 
     for i in range(len(days_to_be_printed)):
         if '[' in days_to_be_printed[i]: # CHECKS IF DATE IS FROM MONTH SELECTED
-            if int(days_to_be_printed[i].replace('[ ', '').replace(']', '')) in eventful_days: #CHECKS IF DAY HAS AT LEAST ONE EVENT
+            if int(days_to_be_printed[i].replace('[ ', '').replace(']', '')) in eventful_days:           #CHECKS IF DAY HAS AT LEAST ONE EVENT
                 days_to_be_printed[i] = f"[*{days_to_be_printed[i].replace('[ ', '').replace(']', '')}]" # CHANGES [ DAY] TO [*DAY]
 
     for line in [days_to_be_printed[x:x+7] for x in range(0, len(days_to_be_printed), 7)]:
@@ -110,26 +119,29 @@ def print_notifications():
         hh, mm = time_str.split(':')
         return int(hh) * 3600 + int(mm) * 60
 
+    """Gets events and checks if they are today and after the current time and displays them in format
+    [*] Notification: in {hh_till_event} hour(s) and {mins_till_event} minute(s) the programmed event '{sorted_event_names[i]}' will take place
+    """
+    global current_year, current_month, current_day, current_hour, current_minutes
     current_year, current_month, current_day = [int(str(x)) for x in str(date.today()).split('-')]
     current_hour, current_minutes = [int(x) for x in hourtime.now().strftime("%H:%M").split(":")]
     current_time_in_secs = convert_hh_mm_to_seconds(f'{current_hour}:{current_minutes}')
-    # print(current_year, current_month, current_day, current_hour, current_minutes)
 
     events = CSVrw.read('events.csv')[1:]
     coming_event_hours = []
     coming_event_names = []
     for event in events:
-        event_year, event_month, event_day, event_hour, event_name = int(event[0].split('-')[2]), int(event[0].split('-')[1]), int(event[0].split('-')[0]), event[1], event[3]
-        if event_year == current_year and event_month == current_month and event_day == current_day:
-            if int(event_hour.split(':')[0]) >= current_hour:
-                if int(event_hour.split(':')[1]) > current_hour:
+        # initialize event details yy, mm, dd, hh, name
+        event_year, event_month, event_day, event_hour, event_name = int(event[0].split('-')[2]), int(event[0].split('-')[1]), int(event[0].split('-')[0]), event[1], event[3] 
+        if event_year == current_year and event_month == current_month and event_day == current_day: # checks if the event is today  
+            if int(event_hour.split(':')[0]) >= current_hour:     # checks if event is after the current hour mark
+                if int(event_hour.split(':')[1]) > current_hour:  # checks if event is after the current minute mark
                     coming_event_hours.append(event_hour)
                     coming_event_names.append(event_name)    
     # SORTING OF EVENTS
-    time_in_sec_of_events = [convert_hh_mm_to_seconds(x) for x in coming_event_hours]
+    time_in_sec_of_events = [convert_hh_mm_to_seconds(x) for x in coming_event_hours]  # converts all elements of event times for easier of sorting
     sorted_time_in_sec_of_events, sorted_event_names = [list(x) for x in list(zip(*sorted(zip(time_in_sec_of_events, coming_event_names))))]
-    # sorted_time_in_hh_mm_of_events = [':'.join(str(timedelta(seconds=convert_hh_mm_to_seconds(x))).split(':')[:2]) for x in coming_event_hours]
-    
+
     for i in range(len(sorted_event_names)):
         hh_till_event, mins_till_event = str(timedelta(seconds=sorted_time_in_sec_of_events[i] - current_time_in_secs)).split(':')[:2]
         print(f"[*] Notification: in {hh_till_event} hour(s) and {mins_till_event} minute(s) the programmed event '{sorted_event_names[i]}' will take place")
@@ -147,3 +159,4 @@ if __name__=="__main__":
     print('\n')
     print(generate_calendar(12, 2022))
     print('\n')
+    CSVrw.read_from_month(2022, 12)
