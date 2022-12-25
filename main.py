@@ -185,7 +185,7 @@ def repl():
                     match choice:
                         case "0":
                             break
-                        case "1":  # TODO
+                        case "1":  # TODO make new event
                             year = 0
                             while year < 2022:
                                 year = int(input("Εισάγετε έτος: "))
@@ -198,7 +198,7 @@ def repl():
                                 day = int(
                                     input(f"Εισάγετε έγκυρη μέρα (1 - {months_days}): "))
                             break
-                        case "2":  # TODO
+                        case "2":  # TODO delete event
                             year = 0
                             while year < 2022:
                                 year = int(input("Εισάγετε έτος: "))
@@ -217,7 +217,7 @@ def repl():
                                 f"Το γεγονός διαγράφηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
 
                             break
-                        case "3":  # TODO
+                        case "3":  # TODO change event
                             year = 0
                             while year != 2022:
                                 year = int(input("Εισάγετε έτος: "))
