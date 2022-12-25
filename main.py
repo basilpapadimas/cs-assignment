@@ -175,14 +175,14 @@ def repl():
                 print(generate_calendar(mm, yyyy))
             case "+":
                 while True:
-                    choice2 = input('''
+                    choice = input('''
     Διαχείριση γεγονότων ημερολογίου, επιλέξτε ενέργεια:
         1 Καταγραφή νέου γεγονότος
         2 Διαγραφή γεγονότος
         3 Ενημέρωση γεγονότος
         0 Επιστροφή στο κυρίως μενού
         -> ''')
-                    match choice2:
+                    match choice:
                         case "0":
                             break
                         case "1":  # TODO
@@ -200,16 +200,14 @@ def repl():
                             break
                         case "2":  # TODO
                             year = 0
-                            while year != 2022:
+                            while year < 2022:
                                 year = int(input("Εισάγετε έτος: "))
                             month = 0
                             while not 0 < month <= 12:
                                 month = int(input("Εισάγετε μήνα: "))
                             print("=== Αναζήτηση γεγονότων ===")
                             events = years[year][month]
-                            limit = len(events.printEvents())
-                            event = -1
-                            while not 0 <= event < limit:
+                            while not 0 <= event < len(events.printEvents())-1:
                                 event = int(
                                     input("Επιλέξτε γεγονός προς ενημέρωση: "))
                             event = events.events[event]
