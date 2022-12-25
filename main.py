@@ -41,9 +41,10 @@ class Event:
         self.startdate = datetime(
             self.year, self.month, self.day, self.hour, self.minutes)
         self.enddate = self.startdate+timedelta(minutes=self.duration)
+
     def checkOverlap(self):
         events = years[self.year][self.month].events
-        day = {x:{x: False for x in range(60)} for x in range(24)}
+        day = {x: {x: False for x in range(60)} for x in range(24)}
         for event in events:
             mDate = event.startdate
             while mDate <= event.enddate:
@@ -94,8 +95,10 @@ def initialize(file="events.csv"):
             years[event.year] = {x: Month(x, event.year) for x in range(1, 13)}
         years[event.year][event.month].addEvent(event)
 
+
 def clear_terminal():
-        os.system('cls') if os.name == 'nt' else os.system('clear')
+    os.system('cls') if os.name == 'nt' else os.system('clear')
+
 
 def generate_calendar(mm: int, yyyy: int):
     """Given an input of month number(0 to 12) and year
@@ -177,12 +180,12 @@ def print_notifications():
 
 
 def repl():
-    #clear_terminal()
+    # clear_terminal()
     mm, yyyy = datetime.now().month, datetime.now().year
     print(generate_calendar(mm, yyyy))
 
     while True:
-        
+
         choice = input('''
         Πατήστε ENTER για προβολή του επόμενου μήνα, "q" για έξοδο ή κάποια από τις παρακάτω επιλογές:
             "-" για πλοήγηση στον προηγούμενο μήνα
@@ -192,11 +195,11 @@ def repl():
 
         match choice:  # requires Py3.10
             case "":
-                #clear_terminal()
+                # clear_terminal()
                 mm, yyyy = mm % 12 + 1, yyyy + 1*(mm == 12)
                 print(generate_calendar(mm, yyyy))
             case "-":
-                #clear_terminal()
+                # clear_terminal()
                 mm, yyyy = mm - 1 + 12*(mm == 1), yyyy - 1*(mm == 1)
                 print(generate_calendar(mm, yyyy))
             case "+":
@@ -249,7 +252,7 @@ def repl():
                             break
                         case "3":  # TODO change event
                             year = 0
-                            while year != 2022:
+                            while year < 2022:
                                 year = int(input("Εισάγετε έτος: "))
                             month = 0
                             while not 0 < month <= 12:
@@ -288,6 +291,7 @@ def repl():
                 print(generate_calendar(mm, yyyy))
             case "q":
                 raise SystemExit(0)
+
 
 if __name__ == "__main__":
     initialize()
