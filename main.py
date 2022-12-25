@@ -47,7 +47,8 @@ class Event:
     def __init__(self, ls):
         self.year, self.month, self.day, self.hour, self.minutes, self.duration, self.title = ls
         print(self.day)
-        self.startdate = datetime(self.year, self.month, self.day, self.hour, self.minutes)
+        self.startdate = datetime(
+            self.year, self.month, self.day, self.hour, self.minutes)
         self.enddate = self.startdate+timedelta(minutes=self.duration)
 
     def checkOverlap(self):
@@ -447,5 +448,4 @@ if __name__ == "__main__":
     print('\n')
     print_notifications()
     print('\n')
-    print(Event([2022, 12,25, 23, 30, 25, "test4"]).checkOverlap()[1])
     repl()
