@@ -258,6 +258,9 @@ def repl():
                                     break
                             event = Event([day, month, year, hour,
                                            minutes, duration, title])
+                            if event.year not in years.keys():
+                                years[event.year] = {
+                                    x: Month(x, event.year) for x in range(1, 13)}
                             years[event.year][event.month].addEvent(event)
                             break
                         case "2":  # TODO delete event
