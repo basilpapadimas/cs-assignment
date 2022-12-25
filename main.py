@@ -256,7 +256,7 @@ def repl():
                                 if "," not in answer:
                                     title = answer
                                     break
-                            event = Event([year, month, day, hour,
+                            event = Event([day, month, year, hour,
                                            minutes, duration, title])
                             years[event.year][event.month].addEvent(event)
                             break
