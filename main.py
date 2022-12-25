@@ -394,7 +394,7 @@ def repl():
                                 if "," not in answer:
                                     title = answer
                                     break
-                            event = Event([day, month, year, hour,
+                            event = Event([year, month, day, hour,
                                            minutes, duration, title])
                             overlap = event.checkOverlap()
                             if overlap[0]:
