@@ -32,14 +32,16 @@ class CSVrw:
             file.write("")
 
             writer = csv.writer(file)
-            writer.writerow(["Date","Hour","Duration","Title"])
-            
+            writer.writerow(["Date", "Hour", "Duration", "Title"])
+
             events = []
             for year in years.keys():
                 for month in years[year]:
                     events.extend(years[year][month].events)
             for event in events:
-                writer.writerow([f"{str(event.year)}-{str(event.month)}-{str(event.day)}",f"{str(event.hour)}:{str(event.minutes)}",event.duration,event.title])
+                writer.writerow([f"{str(event.year)}-{str(event.month)}-{str(event.day)}",
+                                f"{str(event.hour)}:{str(event.minutes)}", event.duration, event.title])
+
 
 class Event:
     def __init__(self, ls):
@@ -254,8 +256,9 @@ def repl():
                                 if "," not in answer:
                                     title = answer
                                     break
-                            print(year, month, day, hour,
-                                  minutes, duration, title)
+                            event = Event([year, month, day, hour,
+                                           minutes, duration, title])
+                            years[event.year][event.month].addEvent(event)
                             break
                         case "2":  # TODO delete event
                             year = 0
