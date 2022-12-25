@@ -239,16 +239,20 @@ def repl():
                                 event = int(
                                     input("Επιλέξτε γεγονός προς ενημέρωση: "))
                             event = events.events[event]
-                            event.year, event.month, event.day = list(map(lambda x: int(x), input(
-                                f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ").split("-")))
-                            event.hour, event.minutes = list(map(lambda x: int(x), input(
-                                f"Ώρα γεγονότος ({event.hour}-{event.minutes}): ").split("-")))
-                            event.duration = int(
-                                input(f"Διάρκεια γεγονότος ({event.duration}): "))
+                            answer = input(
+                                f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ") or f"{event.year}-{event.month}-{event.day}"
+                            event.year, event.month, event.day = list(
+                                map(lambda x: int(x), answer.split("-")))
+                            answer = input(
+                                f"Ώρα γεγονότος ({event.hour}:{event.minutes}): ") or f"{event.hour}:{event.minutes}"
+                            event.hour, event.minutes = list(
+                                map(lambda x: int(x), answer.split("-")))
+                            event.duration = int(input(
+                                f"Διάρκεια γεγονότος ({event.duration}): ") or event.duration)
                             event.title = input(
-                                f"Τίτλος γεγονότος ({event.title}): ")
+                                f"Τίτλος γεγονότος ({event.title}): ") or event.title
                             print(
-                                f"Το γεγονός ενημερώθηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
+                                f"Το γεγονός ενημερώθηκε: <[{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
                             break
             case "*":
                 print("=== Αναζήτηση γεγονότων ===")
