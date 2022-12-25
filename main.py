@@ -263,23 +263,35 @@ def repl():
                                     x: Month(x, event.year) for x in range(1, 13)}
                             years[event.year][event.month].addEvent(event)
                             break
-                        case "2":  # TODO delete event
-                            year = 0
-                            while year < 2022:
-                                year = int(input("Εισάγετε έτος: "))
-                            month = 0
-                            while not 0 < month <= 12:
-                                month = int(input("Εισάγετε μήνα: "))
+                        case "2":
+                            while True:
+                                answer = input("Εισάγετε έτος: ")
+                                if not answer.isdigit():
+                                    continue
+                                year = int(answer)
+                                if year >= 2022:
+                                    break
+                            while True:
+                                answer = input("Εισάγετε μήνα: ")
+                                if not answer.isdigit():
+                                    continue
+                                month = int(answer)
+                                if 0 < month <= 12:
+                                    break
                             print("=== Αναζήτηση γεγονότων ===")
                             events = years[year][month]
                             events_len = len(events.printEvents())
                             if events_len == 0:
                                 print("Κανένα γεγονός αυτόν τον μήνα")
                                 continue
-                            event = -1
-                            while not 0 <= event < events_len - 1:
-                                event = int(
-                                    input("Επιλέξτε γεγονός προς ενημέρωση: "))
+                            while True:
+                                answer = input(
+                                    "Επιλέξτε γεγονός προς ενημέρωση: ")
+                                if not answer.isdigit():
+                                    continue
+                                event = int(answer)
+                                if 0 <= event < events_len:
+                                    break
                             event = events.events[event]
                             events.removeEvent(event)
                             print(
