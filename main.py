@@ -246,7 +246,7 @@ def repl():
                             answer = input(
                                 f"Ώρα γεγονότος ({event.hour}:{event.minutes}): ") or f"{event.hour}:{event.minutes}"
                             event.hour, event.minutes = list(
-                                map(lambda x: int(x), answer.split("-")))
+                                map(lambda x: int(x), answer.split(":")))
                             event.duration = int(input(
                                 f"Διάρκεια γεγονότος ({event.duration}): ") or event.duration)
                             event.title = input(
