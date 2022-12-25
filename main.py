@@ -50,7 +50,10 @@ class Month:
 
     def addEvent(self, newevent):
         self.events.append(newevent)
-        #self.events.sort(key=lambda x: x.startdate)
+        # self.events.sort(key=lambda x: x.startdate)
+
+    def removeEvent(self, event):
+        self.events.remove(event)
 
     def printEvents(self):
         # 0. [New Year's Eve] -> Date: 2022-12-31, Time: 23:59, Duration: 0
@@ -133,8 +136,10 @@ def print_notifications():
     """
     '''
     global current_year, current_month, current_day, current_hour, current_minutes
-    current_year, current_month, current_day = [int(str(x)) for x in str(date.today()).split('-')]
-    current_hour, current_minutes = [int(x) for x in datetime.now().strftime("%H:%M").split(":")]
+    current_year, current_month, current_day = [
+        int(str(x)) for x in str(date.today()).split('-')]
+    current_hour, current_minutes = [
+        int(x) for x in datetime.now().strftime("%H:%M").split(":")]
     '''
     now = datetime.now()
 
@@ -181,17 +186,53 @@ def repl():
                         case "0":
                             break
                         case "1":  # TODO
+                            year = 0
+                            while year != 2022:
+                                year = int(input("Εισάγετε έτος: "))
+                            month = 0
+                            while not 0 < month <= 12:
+                                month = int(input("Εισάγετε μήνα: "))
+                            months_days = 31  # How TODO
+                            day = int(input("Εισάγετε μέρα: "))
+                            while not 0 < day <= months_days:
+                                day = int(
+                                    input(f"Εισάγετε έγκυρη μέρα (1 - {months_days}): "))
                             break
                         case "2":  # TODO
+                            year = 0
+                            while year != 2022:
+                                year = int(input("Εισάγετε έτος: "))
+                            month = 0
+                            while not 0 < month <= 12:
+                                month = int(input("Εισάγετε μήνα: "))
+                            print("=== Αναζήτηση γεγονότων ===")
+                            events = years[year][month]
+                            limit = len(events.printEvents())
+                            event = -1
+                            while not 0 <= event < limit:
+                                event = int(
+                                    input("Επιλέξτε γεγονός προς ενημέρωση: "))
+                            event = events.events[event]
+                            events.removeEvent(event)
+                            print(
+                                f"Το γεγονός διαγράφηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
+
                             break
                         case "3":  # TODO
+                            year = 0
+                            while year != 2022:
+                                year = int(input("Εισάγετε έτος: "))
+                            month = 0
+                            while not 0 < month <= 12:
+                                month = int(input("Εισάγετε μήνα: "))
                             print("=== Αναζήτηση γεγονότων ===")
-                            event = years[int(input("Εισάγετε έτος: "))][int(input("Εισάγετε μήνα: "))].printEvents()[
-                                int(input("Επιλέξτε γεγονός προς ενημέρωση: "))]
-                            event.year, event.month, event.day, event.hour, event.minutes, event.duration, event.title = *list(map(lambda x: int(x), input(f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ").split(
-                                "-"))), *list(map(lambda x: int(x), input(f"Ώρα γεγονότος ({event.hour}-{event.minutes}): ").split("-"))), int(input(f"Διάρκεια γεγονότος ({event.duration}): ")), input(f"Τίτλος γεγονότος ({event.title}): ")
-                            print(
-                                f"Το γεγονός ενημερώθηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
+
+                            # event = years[int(input("Εισάγετε έτος: "))][int(input("Εισάγετε μήνα: "))].printEvents()[
+                            #     int(input("Επιλέξτε γεγονός προς ενημέρωση: "))]
+                            # event.year, event.month, event.day, event.hour, event.minutes, event.duration, event.title = *list(map(lambda x: int(x), input(f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ").split(
+                            #     "-"))), *list(map(lambda x: int(x), input(f"Ώρα γεγονότος ({event.hour}-{event.minutes}): ").split("-"))), int(input(f"Διάρκεια γεγονότος ({event.duration}): ")), input(f"Τίτλος γεγονότος ({event.title}): ")
+                            # print(
+                            #     f"Το γεγονός ενημερώθηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
                             break
             case "*":
                 print("=== Αναζήτηση γεγονότων ===")
