@@ -325,36 +325,108 @@ def repl():
                                 f"Το γεγονός διαγράφηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
 
                             break
-                        case "3":  # TODO change event
-                            year = 0
-                            while year < 2022:
-                                year = int(input("Εισάγετε έτος: "))
-                            month = 0
-                            while not 0 < month <= 12:
-                                month = int(input("Εισάγετε μήνα: "))
+                        case "3":
+                            while True:
+                                answer = input("Εισάγετε έτος: ")
+                                if not answer.isdigit():
+                                    continue
+                                year = int(answer)
+                                if year >= 2022:
+                                    break
+                            while True:
+                                answer = input("Εισάγετε μήνα: ")
+                                if not answer.isdigit():
+                                    continue
+                                month = int(answer)
+                                if 0 < month <= 12:
+                                    break
                             print("=== Αναζήτηση γεγονότων ===")
                             events = years[year][month]
                             events_len = len(events.printEvents())
                             if events_len == 0:
                                 print("Κανένα γεγονός αυτόν τον μήνα")
                                 continue
-                            event = -1
-                            while not 0 <= event <= events_len - 1:
-                                event = int(
-                                    input("Επιλέξτε γεγονός προς ενημέρωση: "))
+                            while True:
+                                answer = input(
+                                    "Επιλέξτε γεγονός προς ενημέρωση: ")
+                                if not answer.isdigit():
+                                    continue
+                                event = int(answer)
+                                if 0 <= event < events_len:
+                                    break
                             event = events.events[event]
-                            answer = input(
-                                f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ") or f"{event.year}-{event.month}-{event.day}"
-                            event.year, event.month, event.day = list(
-                                map(lambda x: int(x), answer.split("-")))
-                            answer = input(
-                                f"Ώρα γεγονότος ({event.hour}:{event.minutes}): ") or f"{event.hour}:{event.minutes}"
-                            event.hour, event.minutes = list(
-                                map(lambda x: int(x), answer.split(":")))
-                            event.duration = int(input(
-                                f"Διάρκεια γεγονότος ({event.duration}): ") or event.duration)
-                            event.title = input(
-                                f"Τίτλος γεγονότος ({event.title}): ") or event.title
+
+                            while True:
+                                answer = input(
+                                    f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ") or f"{event.year}-{event.month}-{event.day}"
+                                if re.fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
+                                    continue
+                                year, month, day = map(
+                                    lambda x: int(x), answer.split("-"))
+                                if year < 2022 or not 0 < month <= 12:
+                                    continue
+                                months_days = monthrange(year, month)[1]
+                                if not 0 < day <= months_days:
+                                    continue
+                                break
+                            while True:
+                                answer = input(
+                                    f"Ώρα γεγονότος ({event.hour}:{event.minutes}): ") or f"{event.hour}:{event.minutes}"
+                                if re.fullmatch(r"\d\d?\:\d\d", answer) == None:
+                                    continue
+                                hour, minutes = map(
+                                    lambda x: int(x), answer.split(":"))
+                                if not 0 <= hour <= 23 or not 0 < minutes < 60:
+                                    continue
+                                break
+                            while True:
+                                answer = input(
+                                    f"Διάρκεια γεγονότος ({event.duration}): ") or f"{event.duration}"
+                                if answer.isdigit():
+                                    duration = answer
+                                    break
+                            while True:
+                                answer = input(
+                                    f"Τίτλος γεγονότος ({event.title}): ") or f"{event.title}"
+                                if "," not in answer:
+                                    title = answer
+                                    break
+                            event = Event([day, month, year, hour,
+                                           minutes, duration, title])
+                            overlap = event.checkOverlap()
+                            if overlap[0]:
+                                print("Γεγονός έχει επικάλυψη με άλλα γεγονότα")
+                                print(overlap[1])
+                                while True:
+                                    answer = input(
+                                        f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ") or f"{event.year}-{event.month}-{event.day}"
+                                    if re.fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
+                                        continue
+                                    year, month, day = map(
+                                        lambda x: int(x), answer.split("-"))
+                                    if year < 2022 or not 0 < month <= 12:
+                                        continue
+                                    months_days = monthrange(year, month)[1]
+                                    if not 0 < day <= months_days:
+                                        continue
+                                    break
+                                while True:
+                                    answer = input(
+                                        f"Ωρα γεγονότος ({event.hour}:{event.minutes}): ")
+                                    if re.fullmatch(r"\d\d?\:\d\d", answer) == None:
+                                        continue
+                                    hour, minutes = map(
+                                        lambda x: int(x), answer.split(":"))
+                                    if not 0 <= hour <= 23 or not 0 < minutes < 60:
+                                        continue
+                                    break
+                            if event.year not in years.keys():
+                                years[event.year] = {
+                                    x: Month(x, event.year) for x in range(1, 13)}
+                            # TODO:
+                            years[event.year][event.month].removeEvent(event)
+
+                            years[event.year][event.month].addEvent(event)
                             print(
                                 f"Το γεγονός ενημερώθηκε: <[{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
                             break
