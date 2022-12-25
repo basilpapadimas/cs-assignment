@@ -178,6 +178,7 @@ def repl():
                 mm, yyyy = mm % 12 + 1, yyyy + 1*(mm == 12)
                 print(generate_calendar(mm, yyyy))
             case "-":
+                clear_terminal()
                 mm, yyyy = mm - 1 + 12*(mm == 1), yyyy - 1*(mm == 1)
                 print(generate_calendar(mm, yyyy))
             case "+":
