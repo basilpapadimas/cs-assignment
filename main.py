@@ -250,15 +250,13 @@ def repl():
                             while True:
                                 answer = input("Διάρκεια γεγονότος: ")
                                 if answer.isdigit():
-                                    duration = answer
+                                    duration = int(answer)
                                     break
                             while True:
                                 answer = input("Τίτλος γεγονότος: ")
                                 if "," not in answer:
                                     title = answer
                                     break
-                            if year not in years.keys():
-                                years[event.year] = {x: Month(x, event.year) for x in range(1, 13)}
                             event = Event([year, month, day, hour,
                                            minutes, duration, title])
                             overlap = event.checkOverlap()
