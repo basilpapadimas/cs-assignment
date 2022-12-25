@@ -207,8 +207,12 @@ def repl():
                                 month = int(input("Εισάγετε μήνα: "))
                             print("=== Αναζήτηση γεγονότων ===")
                             events = years[year][month]
+                            events_len = len(events.printEvents())
+                            if events_len == 0:
+                                print("Κανένα γεγονός αυτόν τον μήνα")
+                                continue
                             event = -1
-                            while not 0 <= event < len(events.printEvents())-1:
+                            while not 0 <= event < events_len - 1:
                                 event = int(
                                     input("Επιλέξτε γεγονός προς ενημέρωση: "))
                             event = events.events[event]
@@ -226,8 +230,12 @@ def repl():
                                 month = int(input("Εισάγετε μήνα: "))
                             print("=== Αναζήτηση γεγονότων ===")
                             events = years[year][month]
+                            events_len = len(events.printEvents())
+                            if events_len == 0:
+                                print("Κανένα γεγονός αυτόν τον μήνα")
+                                continue
                             event = -1
-                            while not 0 <= event < len(events.printEvents())-1:
+                            while not 0 <= event < events_len - 1:
                                 event = int(
                                     input("Επιλέξτε γεγονός προς ενημέρωση: "))
                             event = events.events[event]
