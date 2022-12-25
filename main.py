@@ -1,7 +1,8 @@
 from calendar import monthrange
 from datetime import timedelta, datetime
-import os
 import csv
+import re
+import os
 
 
 class CSVrw:
@@ -52,13 +53,14 @@ class Event:
                 mDate = mDate + timedelta(minutes=1)
         mDate = self.startdate
         while mDate <= self.enddate:
-                if day[mDate.hour][mDate.minute] == True:
-                    freecells = """  hours horizontally, minutes vertically, allocated minutes are "++":\n  00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n"""
-                    for x in ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"]:
-                        freecells += x+"".join(str(x)+" " for x in ["++" if day[hour][int(x)-1] else "  " for hour in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]])+"\n"
+            if day[mDate.hour][mDate.minute] == True:
+                freecells = """  hours horizontally, minutes vertically, allocated minutes are "++":\n  00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n"""
+                for x in ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"]:
+                    freecells += x+"".join(str(x)+" " for x in ["++" if day[hour][int(x)-1] else "  " for hour in [
+                                           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]])+"\n"
 
-                    return [True, freecells]
-                mDate = mDate + timedelta(minutes=1)
+                return [True, freecells]
+            mDate = mDate + timedelta(minutes=1)
         return [False, None]
 
 
@@ -214,18 +216,41 @@ def repl():
                     match choice:
                         case "0":
                             break
-                        case "1":  # TODO make new event
-                            year = 0
-                            while year < 2022:
-                                year = int(input("Εισάγετε έτος: "))
-                            month = 0
-                            while not 0 < month <= 12:
-                                month = int(input("Εισάγετε μήνα: "))
-                            months_days = 31  # How TODO
-                            day = int(input("Εισάγετε μέρα: "))
-                            while not 0 < day <= months_days:
-                                day = int(
-                                    input(f"Εισάγετε έγκυρη μέρα (1 - {months_days}): "))
+                        case "1":
+                            while True:
+                                answer = input(
+                                    "Ημερομηνία γεγονότος (yyyy-mm-dd): ")
+                                if re.fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
+                                    continue
+                                year, month, day = map(
+                                    lambda x: int(x), answer.split("-"))
+                                if year < 2022 or not 0 < month <= 12:
+                                    continue
+                                months_days = monthrange(year, month)[1]
+                                if not 0 < day <= months_days:
+                                    continue
+                                break
+                            while True:
+                                answer = input("Ωρα γεγονότος (hh:mm): ")
+                                if re.fullmatch(r"\d\d?\:\d\d", answer) == None:
+                                    continue
+                                hour, minutes = map(
+                                    lambda x: int(x), answer.split(":"))
+                                if not 0 <= hour <= 23 or not 0 < minutes < 60:
+                                    continue
+                                break
+                            while True:
+                                answer = input("Διάρκεια γεγονότος: ")
+                                if answer.isdigit():
+                                    duration = answer
+                                    break
+                            while True:
+                                answer = input("Τίτλος γεγονότος: ")
+                                if "," not in answer:
+                                    title = answer
+                                    break
+                            print(year, month, day, hour,
+                                  minutes, duration, title)
                             break
                         case "2":  # TODO delete event
                             year = 0
@@ -299,5 +324,5 @@ if __name__ == "__main__":
     print('\n')
     print_notifications()
     print('\n')
-    print(Event([24,12,2022,23,30,25,"test4"]).checkOverlap()[1])
+    print(Event([24, 12, 2022, 23, 30, 25, "test4"]).checkOverlap()[1])
     repl()
