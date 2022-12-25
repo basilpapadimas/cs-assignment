@@ -187,7 +187,7 @@ def repl():
                             break
                         case "1":  # TODO
                             year = 0
-                            while year != 2022:
+                            while year < 2022:
                                 year = int(input("Εισάγετε έτος: "))
                             month = 0
                             while not 0 < month <= 12:
