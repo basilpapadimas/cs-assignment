@@ -231,9 +231,16 @@ def repl():
                                 event = int(
                                     input("Επιλέξτε γεγονός προς ενημέρωση: "))
                             event = events.events[event]
-                            # event.year, event.month, event.day, event.hour, event.minutes, event.duration, event.title = *list(map(lambda x: int(x), input(f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ").split(
-                            #     "-"))), *list(map(lambda x: int(x), input(f"Ώρα γεγονότος ({event.hour}-{event.minutes}): ").split("-"))), int(input(f"Διάρκεια γεγονότος ({event.duration}): ")), input(f"Τίτλος γεγονότος ({event.title}): ")
-                            print(f"Το γεγονός ενημερώθηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
+                            event.year, event.month, event.day = list(map(lambda x: int(x), input(
+                                f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ").split("-")))
+                            event.hour, event.minutes = list(map(lambda x: int(x), input(
+                                f"Ώρα γεγονότος ({event.hour}-{event.minutes}): ").split("-")))
+                            event.duration = int(
+                                input(f"Διάρκεια γεγονότος ({event.duration}): "))
+                            event.title = input(
+                                f"Τίτλος γεγονότος ({event.title}): ")
+                            print(
+                                f"Το γεγονός ενημερώθηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
                             break
             case "*":
                 print("=== Αναζήτηση γεγονότων ===")
