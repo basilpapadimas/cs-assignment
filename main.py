@@ -256,7 +256,9 @@ def repl():
                                 if "," not in answer:
                                     title = answer
                                     break
-                            event = Event([day, month, year, hour,
+                            if year not in years.keys():
+                                years[event.year] = {x: Month(x, event.year) for x in range(1, 13)}
+                            event = Event([year, month, day, hour,
                                            minutes, duration, title])
                             overlap = event.checkOverlap()
                             if overlap[0]:
