@@ -258,6 +258,33 @@ def repl():
                                     break
                             event = Event([day, month, year, hour,
                                            minutes, duration, title])
+                            overlap = event.checkOverlap()
+                            if overlap[0]:
+                                print("Γεγονός έχει επικάλυψη με άλλα γεγονότα")
+                                print(overlap[1])
+                                while True:
+                                    answer = input(
+                                        f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ") or f"{event.year}-{event.month}-{event.day}"
+                                    if re.fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
+                                        continue
+                                    year, month, day = map(
+                                        lambda x: int(x), answer.split("-"))
+                                    if year < 2022 or not 0 < month <= 12:
+                                        continue
+                                    months_days = monthrange(year, month)[1]
+                                    if not 0 < day <= months_days:
+                                        continue
+                                    break
+                                while True:
+                                    answer = input(
+                                        f"Ωρα γεγονότος ({event.hour}:{event.minutes}): ")
+                                    if re.fullmatch(r"\d\d?\:\d\d", answer) == None:
+                                        continue
+                                    hour, minutes = map(
+                                        lambda x: int(x), answer.split(":"))
+                                    if not 0 <= hour <= 23 or not 0 < minutes < 60:
+                                        continue
+                                    break
                             if event.year not in years.keys():
                                 years[event.year] = {
                                     x: Month(x, event.year) for x in range(1, 13)}
