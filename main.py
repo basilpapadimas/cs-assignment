@@ -26,14 +26,19 @@ class CSVrw:
 
             return list(map(lambda x: Event(list(map(lambda x: int(x), x[0].split('-'))) + list(map(lambda x: int(x), x[1].split(':'))) + [int(x[2])] + [x[3]]), list(csv.reader(file))[1:]))
 
-    def append(event_to_write):
-        # TODO
-        pass
+    def write(filename):
+        with open(filename, 'w', newline='', encoding='cp1252') as file:
+            file.write("")
 
-    def change(event_to_write, event_to_replace):
-        # TODO
-        pass
-
+            writer = csv.writer(file)
+            writer.writerow(["Date","Hour","Duration","Title"])
+            
+            events = []
+            for year in years.keys():
+                for month in years[year]:
+                    events.extend(years[year][month].events)
+            for event in events:
+                writer.writerow([f"{str(event.year)}-{str(event.month)}-{str(event.day)}",f"{str(event.hour)}:{str(event.minutes)}",event.duration,event.title])
 
 class Event:
     def __init__(self, ls):
@@ -264,7 +269,7 @@ def repl():
                                 print("Κανένα γεγονός αυτόν τον μήνα")
                                 continue
                             event = -1
-                            while not 0 <= event < events_len - 1:
+                            while not 0 <= event <= events_len - 1:
                                 event = int(
                                     input("Επιλέξτε γεγονός προς ενημέρωση: "))
                             event = events.events[event]
@@ -290,6 +295,7 @@ def repl():
                 input("Πατήστε οποιοδήποτε χαρακτήρα για επιστροφή στο κυρίως μενού: ")
                 print(generate_calendar(mm, yyyy))
             case "q":
+                CSVrw.write("events.csv")
                 raise SystemExit(0)
 
 
