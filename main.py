@@ -1,7 +1,7 @@
 from calendar import monthrange
 from datetime import timedelta, datetime
 import csv
-import re
+from re import fullmatch
 import os
 
 
@@ -47,7 +47,8 @@ class Event:
     def __init__(self, ls):
         self.year, self.month, self.day, self.hour, self.minutes, self.duration, self.title = ls
         print(self.day)
-        self.startdate = datetime(self.year, self.month, self.day, self.hour, self.minutes)
+        self.startdate = datetime(
+            self.year, self.month, self.day, self.hour, self.minutes)
         self.enddate = self.startdate+timedelta(minutes=self.duration)
 
     def checkOverlap(self):
@@ -227,7 +228,7 @@ def repl():
                             while True:
                                 answer = input(
                                     "Ημερομηνία γεγονότος (yyyy-mm-dd): ")
-                                if re.fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
+                                if fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
                                     continue
                                 year, month, day = map(
                                     lambda x: int(x), answer.split("-"))
@@ -239,7 +240,7 @@ def repl():
                                 break
                             while True:
                                 answer = input("Ωρα γεγονότος (hh:mm): ")
-                                if re.fullmatch(r"\d\d?\:\d\d", answer) == None:
+                                if fullmatch(r"\d\d?\:\d\d", answer) == None:
                                     continue
                                 hour, minutes = map(
                                     lambda x: int(x), answer.split(":"))
@@ -267,7 +268,7 @@ def repl():
                                 while True:
                                     answer = input(
                                         f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ") or f"{event.year}-{event.month}-{event.day}"
-                                    if re.fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
+                                    if fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
                                         continue
                                     year, month, day = map(
                                         lambda x: int(x), answer.split("-"))
@@ -280,7 +281,7 @@ def repl():
                                 while True:
                                     answer = input(
                                         f"Ωρα γεγονότος ({event.hour}:{event.minutes}): ")
-                                    if re.fullmatch(r"\d\d?\:\d\d", answer) == None:
+                                    if fullmatch(r"\d\d?\:\d\d", answer) == None:
                                         continue
                                     hour, minutes = map(
                                         lambda x: int(x), answer.split(":"))
@@ -361,7 +362,7 @@ def repl():
                             while True:
                                 answer = input(
                                     f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ") or f"{event.year}-{event.month}-{event.day}"
-                                if re.fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
+                                if fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
                                     continue
                                 year, month, day = map(
                                     lambda x: int(x), answer.split("-"))
@@ -374,7 +375,7 @@ def repl():
                             while True:
                                 answer = input(
                                     f"Ώρα γεγονότος ({event.hour}:{event.minutes}): ") or f"{event.hour}:{event.minutes}"
-                                if re.fullmatch(r"\d\d?\:\d\d", answer) == None:
+                                if fullmatch(r"\d\d?\:\d\d", answer) == None:
                                     continue
                                 hour, minutes = map(
                                     lambda x: int(x), answer.split(":"))
@@ -402,7 +403,7 @@ def repl():
                                 while True:
                                     answer = input(
                                         f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ") or f"{event.year}-{event.month}-{event.day}"
-                                    if re.fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
+                                    if fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
                                         continue
                                     year, month, day = map(
                                         lambda x: int(x), answer.split("-"))
@@ -415,7 +416,7 @@ def repl():
                                 while True:
                                     answer = input(
                                         f"Ωρα γεγονότος ({event.hour}:{event.minutes}): ")
-                                    if re.fullmatch(r"\d\d?\:\d\d", answer) == None:
+                                    if fullmatch(r"\d\d?\:\d\d", answer) == None:
                                         continue
                                     hour, minutes = map(
                                         lambda x: int(x), answer.split(":"))
@@ -449,5 +450,4 @@ if __name__ == "__main__":
     print('\n')
     print_notifications()
     print('\n')
-    print(Event([2022, 12,25, 23, 30, 25, "test4"]).checkOverlap()[1])
     repl()
