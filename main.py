@@ -116,8 +116,12 @@ def generate_calendar(mm: int, yyyy: int):
         days_of_given_mm + first_days_of_next_month_needed_num
 
     eventful_days = set()
-    for event in years[yyyy][mm].events:
-        eventful_days.add(event.day)
+    try:
+        for event in years[yyyy][mm].events:
+            eventful_days.add(event.day)
+    except KeyError:
+        print('[-]Exceeded year 2024 aborting...')
+        exit()
 
     for i in range(len(days_to_be_printed)):
         if '[' in days_to_be_printed[i]:  # CHECKS IF DATE IS FROM MONTH SELECTED
