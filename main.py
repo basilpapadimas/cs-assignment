@@ -46,7 +46,6 @@ class CSVrw:
 class Event:
     def __init__(self, ls):
         self.year, self.month, self.day, self.hour, self.minutes, self.duration, self.title = ls
-        print(self.day)
         self.startdate = datetime(
             self.year, self.month, self.day, self.hour, self.minutes)
         self.enddate = self.startdate+timedelta(minutes=self.duration)
@@ -253,6 +252,7 @@ def repl():
                                 if answer.isdigit():
                                     duration = int(answer)
                                     break
+                            
                             while True:
                                 answer = input("Τίτλος γεγονότος: ")
                                 if "," not in answer:
