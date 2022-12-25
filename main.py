@@ -1,5 +1,6 @@
 from calendar import monthrange
 from datetime import timedelta, datetime
+import os
 import csv
 
 
@@ -75,6 +76,8 @@ def initialize(file="events.csv"):
             years[event.year] = {x: Month(x, event.year) for x in range(1, 13)}
         years[event.year][event.month].addEvent(event)
 
+def clear_terminal():
+        os.system('cls') if os.name == 'nt' else os.system('clear')
 
 def generate_calendar(mm: int, yyyy: int):
     """Given an input of month number(0 to 12) and year
@@ -155,10 +158,12 @@ def print_notifications():
 
 
 def repl():
+    clear_terminal()
     mm, yyyy = datetime.now().month, datetime.now().year
     print(generate_calendar(mm, yyyy))
 
     while True:
+        
         choice = input('''
         Πατήστε ENTER για προβολή του επόμενου μήνα, "q" για έξοδο ή κάποια από τις παρακάτω επιλογές:
             "-" για πλοήγηση στον προηγούμενο μήνα
@@ -168,6 +173,7 @@ def repl():
 
         match choice:  # requires Py3.10
             case "":
+                clear_terminal()
                 mm, yyyy = mm % 12 + 1, yyyy + 1*(mm == 12)
                 print(generate_calendar(mm, yyyy))
             case "-":
