@@ -75,7 +75,7 @@ class Month:
         # 0. [New Year's Eve] -> Date: 2022-12-31, Time: 23:59, Duration: 0
         counter = 0
         for event in self.events:
-            print(f"{counter}. [{event.title}] -> Date: {str(event.year)}-{str(event.month)}-{str(event.day)}, Time: {str(event.hour)}:{str(event.minutes)}, Duration: {str(event.duration)}")
+            print(f"{counter}. [{event.title}] -> Date: {str(event.year)}-{str(event.month)}-{str(event.day)}, Time: {str(event.hour)}:{str(event.minutes)}, Duration: {str(event.duration)}\n")
             counter += 1
         return self.events
 
