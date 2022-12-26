@@ -293,6 +293,9 @@ def repl():
                                         continue
                                     break
                                 overlap = event.checkOverlap()
+                            else:
+                                event = Event([year, month, day, hour,
+                                               minutes, duration, title])
                             if event.year not in years.keys():
                                 years[event.year] = {
                                     x: Month(x, event.year) for x in range(1, 13)}
@@ -431,6 +434,9 @@ def repl():
                                         continue
                                     break
                                 overlap = event.checkOverlap()
+                            else:
+                                event = Event([year, month, day, hour,
+                                               minutes, duration, title])
                             if event.year not in years.keys():
                                 years[event.year] = {
                                     x: Month(x, event.year) for x in range(1, 13)}
