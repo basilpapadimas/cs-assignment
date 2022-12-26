@@ -6,16 +6,6 @@ from functools import reduce
 
 
 class CSVrw:
-    """read(): READS THE CSV FILE AND RETURNS A LIST OF LIST OF THE LINES
-    [[LINE0 SPLITED IN COLLUMNS], [LINE1 SPLITED IN COLLUMNS], [LINE2 SPLITED IN COLLUMNS], ...]
-
-    append(): THE event_to_write PARAMETER REQUIRES A LIST OF ELEMENTS: [DATE, HOUR, DURATION, NAME]
-    WHICH ARE GOING TO BE APPENDED TO THE FILE ACCORDING TO THEIR INDEX TO THE SPECIFIC COLUMN ON
-
-    change(): THE event_to_replace PARAMETER REQUIRES A LIST OF ELEMENTS: [DATE, HOUR, DURATION, NAME]
-    WHICH ALREADY EXISTS IN THE FILE WHICH IS GOING TO BE REPLACED BY THE event_to_write LIST
-    """
-
     def read(filename):
         try:
             with open(filename, 'r', newline='', encoding='cp1252') as file:
@@ -47,7 +37,6 @@ class CSVrw:
                 writer.writerow([f"{str(event.year)}-{str(event.month)}-{str(event.day)}",
                                 f"{str(event.hour)}:{str(event.minutes)}", event.duration, event.title])
 
-
 class Event:
     def __init__(self, ls):
         self.year, self.month, self.day, self.hour, self.minutes, self.duration, self.title = ls
@@ -75,8 +64,6 @@ class Event:
                 return [True, freecells]
         return [False, None]
 
-
-
 class Month:
     def __init__(self, mm: int, yyyy: int):
         self.month = mm
@@ -91,13 +78,9 @@ class Month:
         self.events.remove(event)
 
     def printEvents(self):
-        # 0. [New Year's Eve] -> Date: 2022-12-31, Time: 23:59, Duration: 0
-        counter = 0
-        for event in self.events:
-            print(f"{counter}. [{event.title}] -> Date: {str(event.year)}-{str(event.month)}-{str(event.day)}, Time: {str(event.hour)}:{str(event.minutes)}, Duration: {str(event.duration)}\n")
-            counter += 1
+        for index, event in enumerate(self.events):
+            print(f"{index}. [{event.title}] -> Date: {str(event.year)}-{str(event.month)}-{str(event.day)}, Time: {str(event.hour)}:{str(event.minutes)}, Duration: {str(event.duration)}\n")
         return self.events
-
 
 def initialize(file="events.csv"):
     global years
@@ -112,16 +95,11 @@ def initialize(file="events.csv"):
 
 
 def generate_calendar(mm: int, yyyy: int):
-    """Given an input of month number (0 to 11) and year
+    """Given an input of month number (1 to 12) and year
     it returns a string of the calendar of the month
     including last days of last month and first days of next month
     if they so collide with the calendar
     """
-
-    def get_num_of_days(mm, yyyy):
-        """Returns a tuple of type (weekday of first day of the month, number of days in given month)
-        DOCTESTS LATER TO BE ADDED"""
-        return monthrange(yyyy, mm)
 
     calendar_string = f"""
     {'─'*55}
@@ -129,14 +107,15 @@ def generate_calendar(mm: int, yyyy: int):
     {'─'*55}
     {'｜ '.join(['  ΔΕΥ', '  ΤΡΙ', '  ΤΕΤ', '  ΠΕΜ', '  ΠΑΡ', '  ΣΑΒ', '  ΚΥΡ'])}
     """
+
     if monthrange(yyyy, mm)[0] != 0:
-        last_days_of_last_month = [f"   {x}" for x in list(range(1, int(get_num_of_days(int(
-            mm) - 1 + 12*(1 if mm == 1 else 0), yyyy)[1]) + 1))[-1 * int(get_num_of_days(mm, yyyy)[0]):]]
+        last_days_of_last_month = [f"   {x}" for x in list(range(1, int(monthrange(yyyy, int(
+            mm) - 1 + 12*(1 if mm == 1 else 0))[1]) + 1))[-1 * int(monthrange(yyyy, mm)[0]):]]
     else:
         last_days_of_last_month = []
 
     days_of_given_mm = [f'[  {day}]' if len(str(day)) == 1 else f'[ {day}]' for day in list(
-        range(1, get_num_of_days(mm, yyyy)[1] + 1))]
+        range(1, monthrange(yyyy, mm)[1] + 1))]
 
     first_days_of_next_month_needed_num = [f"    {x}" for x in list(range(
         1, 6 - datetime(yyyy, mm, int(days_of_given_mm[-1].replace('[ ', '').replace(']', ''))).weekday() + 1))]
@@ -163,16 +142,8 @@ def generate_calendar(mm: int, yyyy: int):
 
 
 def print_notifications():
-    """Gets events and checks if they are today and after the current time and displays them in format
-    [*] Notification: in {hh_till_event} hour(s) and {mins_till_event} minute(s) the programmed event '{sorted_event_names[i]}' will take place
-    """
-    '''
-    global current_year, current_month, current_day, current_hour, current_minutes
-    current_year, current_month, current_day = [
-        int(str(x)) for x in str(date.today()).split('-')]
-    current_hour, current_minutes = [
-        int(x) for x in datetime.now().strftime("%H:%M").split(":")]
-    '''
+    """Checks if events are today and after the current time and displays them"""
+
     now = datetime.now()
 
     coming_events = []
@@ -193,7 +164,6 @@ def repl():
     print(generate_calendar(mm, yyyy))
 
     while True:
-
         choice = input('''
         Πατήστε ENTER για προβολή του επόμενου μήνα, "q" για έξοδο ή κάποια από τις παρακάτω επιλογές:
             "-" για πλοήγηση στον προηγούμενο μήνα
@@ -445,10 +415,8 @@ def repl():
                 CSVrw.write("events.csv")
                 raise SystemExit(0)
 
-
 if __name__ == "__main__":
     initialize()
-
     print('\n')
     print_notifications()
     print('\n')
