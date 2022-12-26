@@ -37,6 +37,7 @@ class CSVrw:
                 writer.writerow([f"{str(event.year)}-{str(event.month)}-{str(event.day)}",
                                 f"{str(event.hour)}:{str(event.minutes)}", event.duration, event.title])
 
+
 class Event:
     def __init__(self, ls):
         self.year, self.month, self.day, self.hour, self.minutes, self.duration, self.title = ls
@@ -46,9 +47,11 @@ class Event:
 
     def checkOverlap(self):
         events = []
-        for year in filter(lambda x: x<self.year, years.keys()):
-            events.extend(filter(lambda x: True if x.enddate>=self.startdate else False, reduce(lambda x, y: x+y, [years[year][month].events for month in range(1, 13)])))
-        events.extend(filter(lambda x: True if x.enddate>=self.startdate else False, reduce(lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)])))
+        for year in filter(lambda x: x < self.year, years.keys()):
+            events.extend(filter(lambda x: True if x.enddate >= self.startdate else False, reduce(
+                lambda x, y: x+y, [years[year][month].events for month in range(1, 13)])))
+        events.extend(filter(lambda x: True if x.enddate >= self.startdate else False, reduce(
+            lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)])))
         for event in events:
             if not (event.enddate < self.startdate and event.startdate < self.enddate) or not (event.startdate > self.enddate and event.enddate > self.startdate):
                 day = {x: {x: False for x in range(60)} for x in range(24)}
@@ -60,9 +63,11 @@ class Event:
                         mDate = mDate + timedelta(minutes=1)
                 freecells = "  hours horizontally, minutes vertically, allocated minutes are \"++\":\n   00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n"
                 for x in ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"]:
-                    freecells += x+" "+"".join(str(x)+" " for x in ["++" if day[hour][int(x)-1] else "  " for hour in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]])+"\n"
+                    freecells += x+" "+"".join(str(x)+" " for x in ["++" if day[hour][int(x)-1] else "  " for hour in [
+                                               0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]])+"\n"
                 return [True, freecells]
         return [False, None]
+
 
 class Month:
     def __init__(self, mm: int, yyyy: int):
@@ -71,7 +76,7 @@ class Month:
         self.events = []
 
     def addEvent(self, newevent):
-        if newevent.year == self.yyyy and newevent.month == self.mm:
+        if newevent.year == self.year and newevent.month == self.month:
             self.events.append(newevent)
             return True
         else:
@@ -89,6 +94,7 @@ class Month:
             print(f"{index}. [{event.title}] -> Date: {str(event.year)}-{str(event.month)}-{str(event.day)}, Time: {str(event.hour)}:{str(event.minutes)}, Duration: {str(event.duration)}\n")
         return self.events
 
+
 def initialize(file="events.csv"):
     global years
     years = {}
@@ -99,6 +105,7 @@ def initialize(file="events.csv"):
         if event.year not in years.keys():
             years[event.year] = {x: Month(x, event.year) for x in range(1, 13)}
         years[event.year][event.month].addEvent(event)
+
 
 def generate_calendar(mm: int, yyyy: int):
     """Given an input of month number (1 to 12) and year
@@ -275,7 +282,8 @@ def repl():
                                 years[event.year] = {
                                     x: Month(x, event.year) for x in range(1, 13)}
                             years[event.year][event.month].addEvent(event)
-                            print(f"Το γεγονός προστέθηκε: <[{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
+                            print(
+                                f"Το γεγονός προστέθηκε: <[{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
                             break
 
                         case "2":
@@ -312,7 +320,8 @@ def repl():
                                     break
                             event = events.events[event]
                             events.removeEvent(event)
-                            print(f"Το γεγονός διαγράφηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
+                            print(
+                                f"Το γεγονός διαγράφηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
                             break
 
                         case "3":
@@ -426,8 +435,10 @@ def repl():
                                 years[new_event.year] = {
                                     x: Month(x, new_event.year) for x in range(1, 13)}
                             years[event.year][event.month].removeEvent(event)
-                            years[new_event.year][new_event.month].addEvent(new_event)
-                            print(f"Το γεγονός ενημερώθηκε: <[{new_event.title}] -> Date: {new_event.year}-{new_event.month}-{new_event.day}, Time: {new_event.hour}-{new_event.minutes}, Duration: {new_event.duration}>")
+                            years[new_event.year][new_event.month].addEvent(
+                                new_event)
+                            print(
+                                f"Το γεγονός ενημερώθηκε: <[{new_event.title}] -> Date: {new_event.year}-{new_event.month}-{new_event.day}, Time: {new_event.hour}-{new_event.minutes}, Duration: {new_event.duration}>")
                             break
             case "*":
                 print("=== Αναζήτηση γεγονότων ===")
@@ -435,10 +446,11 @@ def repl():
                     input("Εισάγετε μήνα: "))].printEvents()
                 input("Πατήστε οποιοδήποτε χαρακτήρα για επιστροφή στο κυρίως μενού: ")
                 print(generate_calendar(mm, yyyy))
-                
+
             case "q":
                 CSVrw.write("events.csv")
                 raise SystemExit(0)
+
 
 if __name__ == "__main__":
     initialize()
