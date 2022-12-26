@@ -244,7 +244,7 @@ def repl():
                                     continue
                                 hour, minutes = map(
                                     lambda x: int(x), answer.split(":"))
-                                if not 0 <= hour <= 23 or not 0 < minutes < 60:
+                                if not 0 <= hour <= 23 or not 0 <= minutes < 60:
                                     continue
                                 break
                             while True:
@@ -261,7 +261,7 @@ def repl():
                             event = Event([year, month, day, hour,
                                            minutes, duration, title])
                             overlap = event.checkOverlap()
-                            if overlap[0]:
+                            while overlap[0]:
                                 print("Γεγονός έχει επικάλυψη με άλλα γεγονότα")
                                 print(overlap[1])
                                 while True:
@@ -279,7 +279,7 @@ def repl():
                                     break
                                 while True:
                                     answer = input(
-                                        f"Ωρα γεγονότος ({event.hour}:{event.minutes}): ")
+                                        f"Ωρα γεγονότος ({event.hour}:{event.minutes}): ") or f"{event.hour}:{event.minutes}"
                                     if fullmatch(r"\d\d?\:\d\d", answer) == None:
                                         continue
                                     hour, minutes = map(
@@ -287,6 +287,7 @@ def repl():
                                     if not 0 <= hour <= 23 or not 0 < minutes < 60:
                                         continue
                                     break
+                                overlap = event.checkOverlap()
                             if event.year not in years.keys():
                                 years[event.year] = {
                                     x: Month(x, event.year) for x in range(1, 13)}
