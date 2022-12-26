@@ -292,10 +292,9 @@ def repl():
                                     if not 0 <= hour <= 23 or not 0 < minutes < 60:
                                         continue
                                     break
-                                overlap = event.checkOverlap()
-                            else:
                                 event = Event([year, month, day, hour,
                                                minutes, duration, title])
+                                overlap = event.checkOverlap()
                             if event.year not in years.keys():
                                 years[event.year] = {
                                     x: Month(x, event.year) for x in range(1, 13)}
@@ -404,15 +403,15 @@ def repl():
                                 if "," not in answer:
                                     title = answer
                                     break
-                            event = Event([year, month, day, hour,
-                                           minutes, duration, title])
-                            overlap = event.checkOverlap()
+                            new_event = Event([year, month, day, hour,
+                                               minutes, duration, title])
+                            overlap = new_event.checkOverlap()
                             while overlap[0]:
                                 print("Γεγονός έχει επικάλυψη με άλλα γεγονότα")
                                 print(overlap[1])
                                 while True:
                                     answer = input(
-                                        f"Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ") or f"{event.year}-{event.month}-{event.day}"
+                                        f"Ημερομηνία γεγονότος ({new_event.year}-{new_event.month}-{new_event.day}): ") or f"{new_event.year}-{new_event.month}-{new_event.day}"
                                     if fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
                                         continue
                                     year, month, day = map(
@@ -425,7 +424,7 @@ def repl():
                                     break
                                 while True:
                                     answer = input(
-                                        f"Ωρα γεγονότος ({event.hour}:{event.minutes}): ")
+                                        f"Ωρα γεγονότος ({new_event.hour}:{new_event.minutes}): ") or f"{new_event.hour}:{new_event.minutes}"
                                     if fullmatch(r"\d\d?\:\d\d", answer) == None:
                                         continue
                                     hour, minutes = map(
@@ -433,17 +432,15 @@ def repl():
                                     if not 0 <= hour <= 23 or not 0 < minutes < 60:
                                         continue
                                     break
-                                overlap = event.checkOverlap()
-                            else:
-                                event = Event([year, month, day, hour,
-                                               minutes, duration, title])
-                            if event.year not in years.keys():
-                                years[event.year] = {
-                                    x: Month(x, event.year) for x in range(1, 13)}
-                            # TODO:
+                                new_event = Event([year, month, day, hour,
+                                                   minutes, duration, title])
+                                overlap = new_event.checkOverlap()
+                            if new_event.year not in years.keys():
+                                years[new_event.year] = {
+                                    x: Month(x, new_event.year) for x in range(1, 13)}
                             years[event.year][event.month].removeEvent(event)
-
-                            years[event.year][event.month].addEvent(event)
+                            years[new_event.year][new_event.month].addEvent(
+                                new_event)
                             print(
                                 f"Το γεγονός ενημερώθηκε: <[{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
                             break
