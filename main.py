@@ -69,9 +69,9 @@ class Event:
                         if datetime(self.year, self.month, self.day, 0, 0, 0) <= mDate < (datetime(self.year, self.month, self.day, 0, 0, 0) + timedelta(days=1)):
                             day[mDate.hour][mDate.minute] = True
                         mDate = mDate + timedelta(minutes=1)
-                freecells = "  hours horizontally, minutes vertically, allocated minutes are \"++\":\n  00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n"
+                freecells = "  hours horizontally, minutes vertically, allocated minutes are \"++\":\n   00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n"
                 for x in ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"]:
-                    freecells += x+"".join(str(x)+" " for x in ["++" if day[hour][int(x)-1] else "  " for hour in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]])+"\n"
+                    freecells += x+" "+"".join(str(x)+" " for x in ["++" if day[hour][int(x)-1] else "  " for hour in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]])+"\n"
                 return [True, freecells]
         return [False, None]
 
@@ -112,14 +112,10 @@ def initialize(file="events.csv"):
 
 
 def generate_calendar(mm: int, yyyy: int):
-    """Given an input of month number(0 to 12) and year
+    """Given an input of month number (0 to 11) and year
     it returns a string of the calendar of the month
     including last days of last month and first days of next month
     if they so collide with the calendar
-
-    events is a list of string type elements [Date,Hour,Duration,Title]
-    so events = [[date1, hour1, duration1, title1], [date2, hour2, duration2, title2], ...]
-    NO DOCTESTS?
     """
 
     def get_num_of_days(mm, yyyy):
@@ -129,7 +125,7 @@ def generate_calendar(mm: int, yyyy: int):
 
     calendar_string = f"""
     {'─'*55}
-       ｜{[None, 'ΙΑΝ', 'ΦΕΒ', 'ΜΑΡ', 'ΑΠΡ', 'ΜΑΙ', 'ΙΟΥΝ', 'ΙΟΥΛ', 'ΑΥΓ', 'ΣΕΠ', 'ΟΚΤ', 'ΝΟΕ', 'ΔΕΚ'][mm]} {yyyy}｜
+       ｜{['ΙΑΝ', 'ΦΕΒ', 'ΜΑΡ', 'ΑΠΡ', 'ΜΑΙ', 'ΙΟΥΝ', 'ΙΟΥΛ', 'ΑΥΓ', 'ΣΕΠ', 'ΟΚΤ', 'ΝΟΕ', 'ΔΕΚ'][mm-1]} {yyyy}｜
     {'─'*55}
     {'｜ '.join(['  ΔΕΥ', '  ΤΡΙ', '  ΤΕΤ', '  ΠΕΜ', '  ΠΑΡ', '  ΣΑΒ', '  ΚΥΡ'])}
     """
