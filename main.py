@@ -54,7 +54,6 @@ class Event:
             lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)])))
         for event in events:
             if not ((event.enddate < self.startdate and event.startdate < self.enddate) or (event.startdate > self.enddate and event.enddate > self.startdate)):
-                print(event.startdate, event.enddate, self.startdate, self.enddate)
                 day = {x: {x: False for x in range(60)} for x in range(24)}
                 for event2 in events:
                     mDate = event2.startdate
