@@ -34,8 +34,8 @@ class CSVrw:
                 for month in years[year]:
                     events.extend(years[year][month].events)
             for event in events:
-                writer.writerow([f"{str(event.year)}-{str(event.month)}-{str(event.day)}",
-                                f"{str(event.hour)}:{str(event.minutes)}", event.duration, event.title])
+                writer.writerow([f"{event.year}-{event.month}-{event.day}",
+                                f"{event.hour}:{event.minutes}", event.duration, event.title])
 
 
 class Event:
@@ -91,7 +91,7 @@ class Month:
 
     def printEvents(self):
         for index, event in enumerate(self.events):
-            print(f"{index}. [{event.title}] -> Date: {str(event.year)}-{str(event.month)}-{str(event.day)}, Time: {str(event.hour)}:{str(event.minutes)}, Duration: {str(event.duration)}\n")
+            print(f"{index}. [{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}:{event.minutes:02d}, Duration: {event.duration}\n")
         return self.events
 
 
@@ -265,7 +265,7 @@ def repl():
 
                                 while True:
                                     answer = input(
-                                        f"Ωρα γεγονότος ({event.hour}:{event.minutes}): ") or f"{event.hour}:{event.minutes}"
+                                        f"Ωρα γεγονότος ({event.hour}:{event.minutes:02d}): ") or f"{event.hour}:{event.minutes:02d}"
                                     if fullmatch(r"\d\d?\:\d\d", answer) == None:
                                         continue
                                     hour, minutes = map(
@@ -283,7 +283,7 @@ def repl():
                                     x: Month(x, event.year) for x in range(1, 13)}
                             years[event.year][event.month].addEvent(event)
                             print(
-                                f"Το γεγονός προστέθηκε: <[{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
+                                f"Το γεγονός προστέθηκε: <[{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}:{event.minutes:02d}, Duration: {event.duration}>")
                             break
 
                         case "2":
@@ -321,7 +321,7 @@ def repl():
                             event = events.events[event]
                             events.removeEvent(event)
                             print(
-                                f"Το γεγονός διαγράφηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
+                                f"Το γεγονός διαγράφηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}:{event.minutes:02d}, Duration: {event.duration}>")
                             break
 
                         case "3":
@@ -374,7 +374,7 @@ def repl():
 
                             while True:
                                 answer = input(
-                                    f"Ώρα γεγονότος ({event.hour}:{event.minutes}): ") or f"{event.hour}:{event.minutes}"
+                                    f"Ώρα γεγονότος ({event.hour}:{event.minutes:02d}): ") or f"{event.hour}:{event.minutes:02d}"
                                 if fullmatch(r"\d\d?\:\d\d", answer) == None:
                                     continue
                                 hour, minutes = map(
@@ -420,7 +420,7 @@ def repl():
 
                                 while True:
                                     answer = input(
-                                        f"Ωρα γεγονότος ({new_event.hour}:{new_event.minutes}): ") or f"{new_event.hour}:{new_event.minutes}"
+                                        f"Ωρα γεγονότος ({new_event.hour}:{new_event.minutes:02d}): ") or f"{new_event.hour}:{new_event.minutes:02d}"
                                     if fullmatch(r"\d\d?\:\d\d", answer) == None:
                                         continue
                                     hour, minutes = map(
@@ -438,7 +438,7 @@ def repl():
                             years[new_event.year][new_event.month].addEvent(
                                 new_event)
                             print(
-                                f"Το γεγονός ενημερώθηκε: <[{new_event.title}] -> Date: {new_event.year}-{new_event.month}-{new_event.day}, Time: {new_event.hour}-{new_event.minutes}, Duration: {new_event.duration}>")
+                                f"Το γεγονός ενημερώθηκε: <[{new_event.title}] -> Date: {new_event.year}-{new_event.month}-{new_event.day}, Time: {new_event.hour}:{new_event.minutes:02d}, Duration: {new_event.duration}>")
                             break
             case "*":
                 print("=== Αναζήτηση γεγονότων ===")
