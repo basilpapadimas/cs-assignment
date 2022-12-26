@@ -17,15 +17,21 @@ class CSVrw:
     """
 
     def read(filename):
-        with open(filename, 'r', newline='', encoding='cp1252') as file:
-            leading_bytes = file.read(3)
+        try:
+            with open(filename, 'r', newline='', encoding='cp1252') as file:
+                leading_bytes = file.read(3)
 
-            if (leading_bytes != 'ï»¿'):
-                file.seek(0)
-            else:
-                pass
+                if (leading_bytes != 'ï»¿'):
+                    file.seek(0)
+                else:
+                    pass
 
-            return list(map(lambda x: Event(list(map(lambda x: int(x), x[0].split('-'))) + list(map(lambda x: int(x), x[1].split(':'))) + [int(x[2])] + [x[3]]), list(csv.reader(file))[1:]))
+                return list(map(lambda x: Event(list(map(lambda x: int(x), x[0].split('-'))) + list(map(lambda x: int(x), x[1].split(':'))) + [int(x[2])] + [x[3]]), list(csv.reader(file))[1:]))
+        except FileNotFoundError:
+            with open(filename, 'w', newline='', encoding='cp1252') as file:
+                file.write("")
+            CSVrw.read(filename)
+
 
     def write(filename):
         with open(filename, 'w', newline='', encoding='cp1252') as file:
@@ -106,10 +112,6 @@ def initialize(file="events.csv"):
         years[event.year][event.month].addEvent(event)
 
 
-def clear_terminal():
-    os.system('cls') if os.name == 'nt' else os.system('clear')
-
-
 def generate_calendar(mm: int, yyyy: int):
     """Given an input of month number(0 to 12) and year
     it returns a string of the calendar of the month
@@ -179,6 +181,8 @@ def print_notifications():
     now = datetime.now()
 
     coming_events = []
+    if now.year not in years.keys():
+        return
     for event in years[now.year][now.month].events:
         if event.day == now.day and event.startdate > now:  # checks if the event is today
             coming_events.append(event)
@@ -190,7 +194,6 @@ def print_notifications():
 
 
 def repl():
-    # clear_terminal()
     mm, yyyy = datetime.now().month, datetime.now().year
     print(generate_calendar(mm, yyyy))
 
@@ -205,11 +208,9 @@ def repl():
 
         match choice:  # requires Py3.10
             case "":
-                # clear_terminal()
                 mm, yyyy = mm % 12 + 1, yyyy + 1*(mm == 12)
                 print(generate_calendar(mm, yyyy))
             case "-":
-                # clear_terminal()
                 mm, yyyy = mm - 1 + 12*(mm == 1), yyyy - 1*(mm == 1)
                 print(generate_calendar(mm, yyyy))
             case "+":
