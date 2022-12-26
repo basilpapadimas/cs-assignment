@@ -2,7 +2,7 @@ from calendar import monthrange
 from datetime import timedelta, datetime
 import csv
 from re import fullmatch
-import os
+from functools import reduce
 
 
 class CSVrw:
@@ -57,11 +57,14 @@ class Event:
         self.enddate = self.startdate+timedelta(minutes=self.duration)
 
     def checkOverlap(self):
-        if self.year not in years.keys():
-            return [False, None]
-        events = years[self.year][self.month].events
+        events = []
+        for year in filter(lambda x: x<self.year, years.keys()):
+            events.extend(reduce(lambda x, y: x+y, [years[year][month].events for month in range(1, 13)]))
+        events.extend(reduce(lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)]))
         day = {x: {x: False for x in range(60)} for x in range(24)}
         for event in events:
+            if (event.enddate < self.startdate and event.startdate < self.enddate) or (event.startdate > self.enddate and event.enddate > self.startdate):
+                continue
             mDate = event.startdate
             while mDate <= event.enddate:
                 day[mDate.hour][mDate.minute] = True
