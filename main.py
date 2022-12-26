@@ -59,8 +59,8 @@ class Event:
     def checkOverlap(self):
         events = []
         for year in filter(lambda x: x<self.year, years.keys()):
-            events.extend(reduce(lambda x, y: x+y, [years[year][month].events for month in range(1, 13)]))
-        events.extend(reduce(lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)]))
+            events.extend(filter(lambda x: True if x.enddate>=self.startdate else False, reduce(lambda x, y: x+y, [years[year][month].events for month in range(1, 13)])))
+        events.extend(filter(lambda x: True if x.enddate>=self.startdate else False, reduce(lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)])))
         day = {x: {x: False for x in range(60)} for x in range(24)}
         for event in events:
             if (event.enddate < self.startdate and event.startdate < self.enddate) or (event.startdate > self.enddate and event.enddate > self.startdate):
