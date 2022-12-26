@@ -278,7 +278,7 @@ def repl():
                                         continue
                                     hour, minutes = map(
                                         lambda x: int(x), answer.split(":"))
-                                    if not 0 <= hour <= 23 or not 0 < minutes < 60:
+                                    if not 0 <= hour <= 23 or not 0 <= minutes < 60:
                                         continue
                                     break
 
@@ -387,7 +387,7 @@ def repl():
                                     continue
                                 hour, minutes = map(
                                     lambda x: int(x), answer.split(":"))
-                                if not 0 <= hour <= 23 or not 0 < minutes < 60:
+                                if not 0 <= hour <= 23 or not 0 <= minutes < 60:
                                     continue
                                 break
 
@@ -433,7 +433,7 @@ def repl():
                                         continue
                                     hour, minutes = map(
                                         lambda x: int(x), answer.split(":"))
-                                    if not 0 <= hour <= 23 or not 0 < minutes < 60:
+                                    if not 0 <= hour <= 23 or not 0 <= minutes < 60:
                                         continue
                                     break
                                 new_event = Event([year, month, day, hour,
