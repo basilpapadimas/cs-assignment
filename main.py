@@ -253,7 +253,7 @@ def repl():
                                 if answer.isdigit():
                                     duration = int(answer)
                                     break
-                            
+
                             while True:
                                 answer = input("Τίτλος γεγονότος: ")
                                 if "," not in answer:
@@ -292,6 +292,8 @@ def repl():
                                 years[event.year] = {
                                     x: Month(x, event.year) for x in range(1, 13)}
                             years[event.year][event.month].addEvent(event)
+                            print(
+                                f"Το γεγονός προστέθηκε: <[{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
                             break
                         case "2":
                             while True:
