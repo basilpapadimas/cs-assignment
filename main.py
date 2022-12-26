@@ -442,7 +442,7 @@ def repl():
                             years[new_event.year][new_event.month].addEvent(
                                 new_event)
                             print(
-                                f"Το γεγονός ενημερώθηκε: <[{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}-{event.minutes}, Duration: {event.duration}>")
+                                f"Το γεγονός ενημερώθηκε: <[{new_event.title}] -> Date: {new_event.year}-{new_event.month}-{new_event.day}, Time: {new_event.hour}-{new_event.minutes}, Duration: {new_event.duration}>")
                             break
             case "*":
                 print("=== Αναζήτηση γεγονότων ===")
