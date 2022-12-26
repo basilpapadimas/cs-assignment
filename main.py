@@ -161,15 +161,21 @@ def print_notifications():
 
     coming_events = []
     if now.year not in years.keys():
+        print("[*] Κανένα προγραμματισμένο γεγονός σήμερα")
         return
     for event in years[now.year][now.month].events:
         if event.day == now.day and event.startdate > now:  # checks if the event is today
             coming_events.append(event)
+    if len(coming_events) == 0:
+        print("[*] Κανένα προγραμματισμένο γεγονός σήμερα")
+        return
 
     for event in coming_events:
         delta = event.startdate - timedelta(hours=now.hour, minutes=now.minute)
+        time_str = "ώρα" if delta.hour == 1 else "ώρες"
+        minute_str = "λεπτό" if delta.minutes == 1 else "λεπτά"
         print(
-            f"[*] Notification: in {delta.hour} hour(s) and {delta.minute} minute(s) the programmed event '{event.title}' will take place")
+            f"[*] Ειδοποίηση: σε {delta.hour} {time_str} και {delta.minute} {minute_str} υπάρχει προγραμματισμένο γεγονός: '{event.title}'")
 
 
 def repl():
