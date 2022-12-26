@@ -32,7 +32,6 @@ class CSVrw:
                 file.write("")
             CSVrw.read(filename)
 
-
     def write(filename):
         with open(filename, 'w', newline='', encoding='cp1252') as file:
             file.write("")
@@ -58,9 +57,11 @@ class Event:
 
     def checkOverlap(self):
         events = []
-        for year in filter(lambda x: x<self.year, years.keys()):
-            events.extend(filter(lambda x: True if x.enddate>=self.startdate else False, reduce(lambda x, y: x+y, [years[year][month].events for month in range(1, 13)])))
-        events.extend(filter(lambda x: True if x.enddate>=self.startdate else False, reduce(lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)])))
+        for year in filter(lambda x: x < self.year, years.keys()):
+            events.extend(filter(lambda x: True if x.enddate >= self.startdate else False, reduce(
+                lambda x, y: x+y, [years[year][month].events for month in range(1, 13)])))
+        events.extend(filter(lambda x: True if x.enddate >= self.startdate else False, reduce(
+            lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)])))
         day = {x: {x: False for x in range(60)} for x in range(24)}
         for event in events:
             if (event.enddate < self.startdate and event.startdate < self.enddate) or (event.startdate > self.enddate and event.enddate > self.startdate):
@@ -403,7 +404,7 @@ def repl():
                             event = Event([year, month, day, hour,
                                            minutes, duration, title])
                             overlap = event.checkOverlap()
-                            if overlap[0]:
+                            while overlap[0]:
                                 print("Γεγονός έχει επικάλυψη με άλλα γεγονότα")
                                 print(overlap[1])
                                 while True:
@@ -429,6 +430,7 @@ def repl():
                                     if not 0 <= hour <= 23 or not 0 < minutes < 60:
                                         continue
                                     break
+                                overlap = event.checkOverlap()
                             if event.year not in years.keys():
                                 years[event.year] = {
                                     x: Month(x, event.year) for x in range(1, 13)}
