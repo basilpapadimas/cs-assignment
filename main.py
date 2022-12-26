@@ -53,7 +53,7 @@ class Event:
         events.extend(filter(lambda x: True if x.enddate >= self.startdate else False, reduce(
             lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)])))
         for event in events:
-            if not (event.enddate < self.startdate and event.startdate < self.enddate) or not (event.startdate > self.enddate and event.enddate > self.startdate):
+            if not ((event.enddate < self.startdate and event.startdate < self.enddate) or (event.startdate > self.enddate and event.enddate > self.startdate)):
                 day = {x: {x: False for x in range(60)} for x in range(24)}
                 for event2 in events:
                     mDate = event2.startdate
@@ -62,8 +62,8 @@ class Event:
                             day[mDate.hour][mDate.minute] = True
                         mDate = mDate + timedelta(minutes=1)
                 freecells = "  hours horizontally, minutes vertically, allocated minutes are \"++\":\n   00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n"
-                for x in ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60"]:
-                    freecells += x+" "+"".join(str(x)+" " for x in ["++" if day[hour][int(x)-1] else "  " for hour in [
+                for x in ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"]:
+                    freecells += x+" "+"".join(str(x)+" " for x in ["++" if day[hour][int(x)] else "  " for hour in [
                                                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]])+"\n"
                 return [True, freecells]
         return [False, None]
