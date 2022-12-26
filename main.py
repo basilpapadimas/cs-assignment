@@ -7,20 +7,21 @@ from functools import reduce
 
 class CSVrw:
     def read(filename):
-        try:
-            with open(filename, 'r', newline='', encoding='cp1252') as file:
-                leading_bytes = file.read(3)
+        while True:
+            try:
+                with open(filename, 'r', newline='', encoding='cp1252') as file:
+                    leading_bytes = file.read(3)
 
-                if (leading_bytes != 'ï»¿'):
-                    file.seek(0)
-                else:
-                    pass
+                    if (leading_bytes != 'ï»¿'):
+                        file.seek(0)
+                    else:
+                        pass
 
-                return list(map(lambda x: Event(list(map(lambda x: int(x), x[0].split('-'))) + list(map(lambda x: int(x), x[1].split(':'))) + [int(x[2])] + [x[3]]), list(csv.reader(file))[1:]))
-        except FileNotFoundError:
-            with open(filename, 'w', newline='', encoding='cp1252') as file:
-                file.write("")
-            CSVrw.read(filename)
+                    return list(map(lambda x: Event(list(map(lambda x: int(x), x[0].split('-'))) + list(map(lambda x: int(x), x[1].split(':'))) + [int(x[2])] + [x[3]]), list(csv.reader(file))[1:]))
+            except FileNotFoundError:
+                with open(filename, 'w', newline='', encoding='cp1252') as file:
+                    file.write("")
+                continue
 
     def write(filename):
         with open(filename, 'w', newline='', encoding='cp1252') as file:
@@ -100,6 +101,8 @@ def initialize(file="events.csv"):
     years = {}
 
     events = CSVrw.read(file)
+    if not events:
+        events = CSVrw.read(file)
 
     for event in events:
         if event.year not in years.keys():
