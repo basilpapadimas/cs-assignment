@@ -441,9 +441,24 @@ def repl():
                                 f"Το γεγονός ενημερώθηκε: <[{new_event.title}] -> Date: {new_event.year}-{new_event.month}-{new_event.day}, Time: {new_event.hour}:{new_event.minutes:02d}, Duration: {new_event.duration}>")
                             break
             case "*":
+                while True:
+                    answer = input("Εισάγετε έτος: ")
+                    if not answer.isdigit():
+                        continue
+                    year = int(answer)
+                    if year >= 2022:
+                        break
+
+                while True:
+                    answer = input("Εισάγετε μήνα: ")
+                    if not answer.isdigit():
+                        continue
+                    month = int(answer)
+                    if 0 < month <= 12:
+                        break
+
                 print("=== Αναζήτηση γεγονότων ===")
-                years[int(input("Εισάγετε έτος: "))][int(
-                    input("Εισάγετε μήνα: "))].printEvents()
+                years[year][month].printEvents()
                 input("Πατήστε οποιοδήποτε χαρακτήρα για επιστροφή στο κυρίως μενού: ")
                 print(generate_calendar(mm, yyyy))
 
