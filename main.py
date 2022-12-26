@@ -173,16 +173,17 @@ def print_notifications():
     for event in coming_events:
         delta = event.startdate - timedelta(hours=now.hour, minutes=now.minute)
         time_str = "ώρα" if delta.hour == 1 else "ώρες"
-        minute_str = "λεπτό" if delta.minutes == 1 else "λεπτά"
+        minute_str = "λεπτό" if delta.minute == 1 else "λεπτά"
         print(
             f"[*] Ειδοποίηση: σε {delta.hour} {time_str} και {delta.minute} {minute_str} υπάρχει προγραμματισμένο γεγονός: '{event.title}'")
 
 
 def repl():
     mm, yyyy = datetime.now().month, datetime.now().year
-    print(generate_calendar(mm, yyyy))
 
     while True:
+        print(generate_calendar(mm, yyyy))
+
         choice = input('''
         Πατήστε ENTER για προβολή του επόμενου μήνα, "q" για έξοδο ή κάποια από τις παρακάτω επιλογές:
             "-" για πλοήγηση στον προηγούμενο μήνα
@@ -193,10 +194,8 @@ def repl():
         match choice:  # requires Py3.10
             case "":
                 mm, yyyy = mm % 12 + 1, yyyy + 1*(mm == 12)
-                print(generate_calendar(mm, yyyy))
             case "-":
                 mm, yyyy = mm - 1 + 12*(mm == 1), yyyy - 1*(mm == 1)
-                print(generate_calendar(mm, yyyy))
             case "+":
                 while True:
                     choice = input('''
@@ -237,7 +236,7 @@ def repl():
 
                             while True:
                                 answer = input("Διάρκεια γεγονότος: ")
-                                if answer.isdigit():
+                                if answer.isdigit() and int(answer) > 0:
                                     duration = int(answer)
                                     break
 
@@ -249,6 +248,9 @@ def repl():
 
                             event = Event([year, month, day, hour,
                                            minutes, duration, title])
+                            if event.year not in years.keys():
+                                years[event.year] = {
+                                    x: Month(x, event.year) for x in range(1, 13)}
                             overlap = event.checkOverlap()
 
                             while overlap[0]:
@@ -327,7 +329,7 @@ def repl():
                             event = events.events[event]
                             events.removeEvent(event)
                             print(
-                                f"Το γεγονός διαγράφηκε: <[{event.name}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}:{event.minutes:02d}, Duration: {event.duration}>")
+                                f"Το γεγονός διαγράφηκε: <[{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}:{event.minutes:02d}, Duration: {event.duration}>")
                             break
 
                         case "3":
@@ -392,8 +394,8 @@ def repl():
                             while True:
                                 answer = input(
                                     f"Διάρκεια γεγονότος ({event.duration}): ") or f"{event.duration}"
-                                if answer.isdigit():
-                                    duration = answer
+                                if answer.isdigit() and int(answer) > 0:
+                                    duration = int(answer)
                                     break
 
                             while True:
@@ -470,7 +472,6 @@ def repl():
                 if events_len == 0:
                     print("Κανένα γεγονός αυτόν τον μήνα")
                 input("Πατήστε οποιοδήποτε χαρακτήρα για επιστροφή στο κυρίως μενού: ")
-                print(generate_calendar(mm, yyyy))
 
             case "q":
                 CSVrw.write("events.csv")
