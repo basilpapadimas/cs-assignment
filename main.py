@@ -458,7 +458,11 @@ def repl():
                         break
 
                 print("=== Αναζήτηση γεγονότων ===")
-                years[year][month].printEvents()
+
+                events_len = 0 if year not in years.keys() else len(
+                    years[year][month].printEvents())
+                if events_len == 0:
+                    print("Κανένα γεγονός αυτόν τον μήνα")
                 input("Πατήστε οποιοδήποτε χαρακτήρα για επιστροφή στο κυρίως μενού: ")
                 print(generate_calendar(mm, yyyy))
 
