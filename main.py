@@ -62,14 +62,10 @@ class Event:
                         if datetime(self.year, self.month, self.day, 0, 0, 0) <= mDate < (datetime(self.year, self.month, self.day, 0, 0, 0) + timedelta(days=1)):
                             day[mDate.hour][mDate.minute] = True
                         mDate = mDate + timedelta(minutes=1)
-                print(day)
                 freecells = "  hours horizontally, minutes vertically, allocated minutes are \"++\":\n   00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n"
-                for x in ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
-                          "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
-                          "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44",
-                          "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"]:
-                    freecells += x + " " + "".join(str(plus)+" " for plus in ["++" if day[hour][int(x)] else "  " for hour in [
-                        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]])+"\n"
+                for x in range(60):
+                    freecells += f"{x:02d} " + "".join(f"{plus} " for plus in [
+                        "++" if day[hour][x] else "  " for hour in range(24)])+"\n"
                 return [True, freecells]
         return [False, None]
 
