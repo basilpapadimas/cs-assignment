@@ -34,17 +34,17 @@ class Event:
             self.year, self.month, self.day, self.hour, self.minutes)
         self.enddate = self.startdate+timedelta(minutes=self.duration)
 
-    def checkOverlap(self, file="events.csv"):
+    def checkOverlap(self, file="events.csv", datastore):
         """Checks if the event is overlaping with any other event
         """
         events = CSV.read(file)
 
         events = []
-        for year in filter(lambda x: x < self.year, years.keys()):
+        for year in filter(lambda x: x < self.year, datastore.keys()):
             events.extend(filter(lambda x: True if x.enddate >= self.startdate else False, reduce(
-                lambda x, y: x+y, [years[year][month].events for month in range(1, 13)])))
+                lambda x, y: x+y, [datastore[year][month].events for month in range(1, 13)])))
         events.extend(filter(lambda x: True if x.enddate >= self.startdate else False, reduce(
-            lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)])))
+            lambda x, y: x+y, [datastore[self.year][month].events for month in range(1, self.month+1)])))
 
         flag = False
 
