@@ -154,14 +154,14 @@ def repl(years):
                         case "1":   # If user enters 1 get input for event registration
                             event = Event(getEventInfo(years))
                             # Check if event (to be registered) is overlapping with another event
-                            overlap = event.checkOverlap()
+                            overlap = event.checkOverlap(years)
                             # If overlapping: loop until event is not overlapping
                             while overlap[0]:
                                 print(
                                     "[+] Γεγονός έχει επικάλυψη με άλλα γεγονότα\n", overlap[1])
                                 event = Event(updateEventInfo(
                                     event, years, onlyTime=True))
-                                overlap = event.checkOverlap()
+                                overlap = event.checkOverlap(years)
                             # Register event
                             years[event.year][event.month].addEvent(event)
                             print(
@@ -210,7 +210,7 @@ def repl(years):
                             years[event.year][event.month].removeEvent(event)
 
                             # Check if event (to be registered) is overlapping with another event
-                            overlap = new_event.checkOverlap()
+                            overlap = new_event.checkOverlap(years)
 
                             # If overlapping: loop until event is not overlapping
                             while overlap[0]:
@@ -219,7 +219,7 @@ def repl(years):
 
                                 new_event = Event(updateEventInfo(
                                     new_event, years, onlyTime=True))
-                                overlap = new_event.checkOverlap()
+                                overlap = new_event.checkOverlap(years)
 
                             # Register edited event
                             years[new_event.year][new_event.month].addEvent(
