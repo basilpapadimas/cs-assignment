@@ -57,17 +57,12 @@ class Event:
                 day = {x: {x: False for x in range(60)} for x in range(24)}
                 # Loops over the day of the event with one minute steps
                 i = datetime(event.year, event.month, event.day)
-                h = 0
-                m = 0
+
                 while i < datetime(event.year, event.month, event.day) + timedelta(days=1):
                     # Checks for this minute if any event is taking place
-                    day[h][m] = any(event.startdate <= i <=
+                    day[i.hour][i.minute] = any(event.startdate <= i <=
                                     event.enddate for event in events)
                     i += timedelta(minutes=1)
-                    m += 1
-                    if m == 60:
-                        m = 0
-                        h += 1
 
                 # Creates overlap table
                 freecells = "  hours horizontally, minutes vertically, allocated minutes are \"++\":\n   00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n"
