@@ -171,7 +171,7 @@ def repl(years):
                             break
 
                         case "2":   # If user enters 2 get input for event deletion
-
+                            year, month = getMonth()
                             # Print events registered in that mm/yyyy (if any)
                             print(f"\n{'='*37} Αναζήτηση γεγονότων {'='*37}\n")
                             events = years[year][month]
@@ -196,7 +196,6 @@ def repl(years):
                             break
 
                         case "3":   # If user enters 3 get input for event update
-                            year, month = getMonth()
                             # Print events registered in that mm/yyyy (if any)
                             print(f"\n{'='*37} Αναζήτηση γεγονότων {'='*37}\n")
                             answer = getMonth()
