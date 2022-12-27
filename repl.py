@@ -67,8 +67,9 @@ def updateEventInfo(event, years, onlyTime=False):
         if 0 <= hour <= 23 and 0 <= minutes < 60:
             break
 
-    duration, title = event.duration, event.title
-    if not onlyTime:
+    if onlyTime:
+        duration, title = event.duration, event.title
+    else:
         while True:  # Get event's new duration
             answer = input(
                 f"[+] Διάρκεια γεγονότος ({event.duration}): ") or f"{event.duration}"
@@ -151,7 +152,7 @@ def repl(years):
                             break
 
                         case "1":   # If user enters 1 get input for event registration
-                            event = Event(getEventInfo())
+                            event = Event(getEventInfo(years))
                             # Check if event (to be registered) is overlapping with another event
                             overlap = event.checkOverlap()
                             # If overlapping: loop until event is not overlapping
@@ -159,7 +160,7 @@ def repl(years):
                                 print(
                                     "[+] Γεγονός έχει επικάλυψη με άλλα γεγονότα\n", overlap[1])
                                 event = Event(updateEventInfo(
-                                    event, onlyTime=True))
+                                    event, years, onlyTime=True))
                                 overlap = event.checkOverlap()
                             # Register event
                             years[event.year][event.month].addEvent(event)
@@ -204,7 +205,7 @@ def repl(years):
                                 if 0 <= event < events_len:
                                     break
                             event = events.events[event]
-                            new_event = Event(updateEventInfo(event))
+                            new_event = Event(updateEventInfo(event, years))
                             # Remove event temporarily so there are no overhead overlaps
                             years[event.year][event.month].removeEvent(event)
 
@@ -217,7 +218,7 @@ def repl(years):
                                     "[-] Γεγονός έχει επικάλυψη με άλλα γεγονότα\n", overlap[1])
 
                                 new_event = Event(updateEventInfo(
-                                    new_event, onlyTime=True))
+                                    new_event, years, onlyTime=True))
                                 overlap = new_event.checkOverlap()
 
                             # Register edited event
