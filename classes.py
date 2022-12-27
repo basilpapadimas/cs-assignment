@@ -52,7 +52,7 @@ class Event:
 
         flag = False
 
-        for event in events:
+        for event in filter(lambda x: x.enddate >= self.startdate, events):
             if (event.enddate > self.startdate and event.startdate < self.enddate):  # Checks for collision
                 flag = True
                 # Creates day dictionary
