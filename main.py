@@ -46,28 +46,31 @@ class Event:
             self.year, self.month, self.day, self.hour, self.minutes)
         self.enddate = self.startdate+timedelta(minutes=self.duration)
 
-    def checkOverlap(self):
-        events = []
-        for year in filter(lambda x: x < self.year, years.keys()):
-            events.extend(filter(lambda x: True if x.enddate >= self.startdate else False, reduce(
-                lambda x, y: x+y, [years[year][month].events for month in range(1, 13)])))
-        events.extend(filter(lambda x: True if x.enddate >= self.startdate else False, reduce(
-            lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)])))
+    def checkOverlap(self, file="events.csv"):
+        events = CSVrw.read(file)
+        flag = False
+
         for event in events:
-            if not ((event.enddate < self.startdate and event.startdate < self.enddate) or (event.startdate > self.enddate and event.enddate > self.startdate)):
+            if (event.enddate > self.startdate and event.startdate < self.enddate):  # Checks for collision
+                flag = True
+                # Creates day dictionary
                 day = {x: {x: False for x in range(60)} for x in range(24)}
-                for event2 in events:
-                    mDate = event2.startdate
-                    while mDate <= event2.enddate:
-                        if datetime(self.year, self.month, self.day, 0, 0, 0) <= mDate < (datetime(self.year, self.month, self.day, 0, 0, 0) + timedelta(days=1)):
-                            day[mDate.hour][mDate.minute] = True
-                        mDate = mDate + timedelta(minutes=1)
+                # Loops over the day of the event with one minute steps
+                i = datetime(event.year, event.month, event.day)
+
+                while i < datetime(event.year, event.month, event.day) + timedelta(days=1):
+                    # Checks for this minute if any event is taking place
+                    day[i.hour][i.minute] = any(event.startdate <= i <=
+                                    event.enddate for event in events)
+                    i += timedelta(minutes=1)
+
+                # Creates overlap table
                 freecells = "  hours horizontally, minutes vertically, allocated minutes are \"++\":\n   00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n"
                 for x in range(60):
                     freecells += f"{x:02d} " + "".join(f"{plus} " for plus in [
                         "++" if day[hour][x] else "  " for hour in range(24)])+"\n"
-                return [True, freecells]
-        return [False, None]
+
+        return [flag, freecells if flag else None]
 
 
 class Month:
