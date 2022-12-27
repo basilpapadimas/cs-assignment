@@ -201,12 +201,12 @@ def repl(years):
                                 if 0 <= event < events_len:
                                     break
                             event = events.events[event]
+                            new_event = Event(updateEventInfo(event))
                             # Remove event temporarily so there are no overhead overlaps
                             years[event.year][event.month].removeEvent(event)
 
-                            new_event = Event(updateEventInfo())
                             # Check if event (to be registered) is overlapping with another event
-                            overlap = event.checkOverlap()
+                            overlap = new_event.checkOverlap()
                             # If overlapping: loop until event is not overlapping
 
                             while overlap[0]:
