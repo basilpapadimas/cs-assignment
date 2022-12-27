@@ -1,6 +1,7 @@
 from calendar import monthrange
 from datetime import datetime, timedelta
 
+
 def generate_calendar(mm: int, yyyy: int, years):
     """Given an input of month number (1 to 12) and year
     it returns a string of the calendar of the month

@@ -14,6 +14,7 @@ def initialize(file):
             years[event.year] = {x: Month(x, event.year) for x in range(1, 13)}
         years[event.year][event.month].addEvent(event)
 
+
 if __name__ == "__main__":
     initialize("events.csv")
     print('\n')

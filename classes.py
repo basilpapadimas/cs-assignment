@@ -2,6 +2,7 @@ from itertools import chain
 from re import fullmatch
 from datetime import datetime, timedelta
 
+
 class CSV:
     def read(filename):
         while True:
@@ -16,7 +17,9 @@ class CSV:
 
     def write(filename, datastore):
         with open(filename, 'w') as file:
-            file.write("\n".join(["Date,Hour,Duration,Title"] + list(map(lambda x: f"{x.year}-{x.month}-{x.day},{x.hour}:{x.minutes:02d},{x.duration},{x.title}", chain.from_iterable([datastore[year][month].events for year in datastore.keys() for month in datastore[year]])))))
+            file.write("\n".join(["Date,Hour,Duration,Title"] + list(map(lambda x: f"{x.year}-{x.month}-{x.day},{x.hour}:{x.minutes:02d},{x.duration},{x.title}", chain.from_iterable(
+                [datastore[year][month].events for year in datastore.keys() for month in datastore[year]])))))
+
 
 class Event:
     def __init__(self, ls):
@@ -74,6 +77,7 @@ class Month:
 
     def printEvents(self):
         for index, event in enumerate(self.events):
-            print(f"{index}. [{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}:{event.minutes:02d}, Duration: {event.duration}")
+            print(
+                f"{index}. [{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}:{event.minutes:02d}, Duration: {event.duration}")
         print()
         return self.events
