@@ -43,12 +43,12 @@ class Event:
         # For each previous year from the events year
         for year in filter(lambda x: x < self.year, datastore.keys()):
             # Adding to events the events that end after this event starts
-            events.extend(filter(lambda x: x.enddate >= self.startdate, reduce(
-                lambda x, y: x+y, [datastore[year][month].events for month in range(1, 13)])))
+            events.extend(reduce(
+                lambda x, y: x+y, [datastore[year][month].events for month in range(1, 13)]))
         # For each event in this events year, up to the next month this events month ->
         # Adding to the events the events that end after this event starts
-        events.extend(filter(lambda x: x.enddate >= self.startdate, reduce(
-            lambda x, y: x+y, [datastore[self.year][month].events for month in range(1, self.month+1)])))
+        events.extend(reduce(
+            lambda x, y: x+y, [datastore[self.year][month].events for month in range(1, self.month+1)]))
 
         flag = False
 
