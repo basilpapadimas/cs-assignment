@@ -382,6 +382,7 @@ def repl():
                                 if 0 <= event < events_len:
                                     break
                             event = events.events[event]
+                            years[event.year][event.month].removeEvent(event)
 
                             while True:
                                 answer = input(
@@ -459,7 +460,6 @@ def repl():
                             if new_event.year not in years.keys():
                                 years[new_event.year] = {
                                     x: Month(x, new_event.year) for x in range(1, 13)}
-                            years[event.year][event.month].removeEvent(event)
                             years[new_event.year][new_event.month].addEvent(
                                 new_event)
                             print(
