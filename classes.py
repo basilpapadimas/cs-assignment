@@ -34,7 +34,7 @@ class Event:
             self.year, self.month, self.day, self.hour, self.minutes)
         self.enddate = self.startdate+timedelta(minutes=self.duration)
 
-    def checkOverlap(self, datastore, file="events.csv"):
+    def checkOverlap(self, datastore):
         """Checks if the event is overlaping with any other event,
         If it is, it prints a table with the occupied hours of the day of the event.
         """
