@@ -35,15 +35,19 @@ class Event:
         self.enddate = self.startdate+timedelta(minutes=self.duration)
 
     def checkOverlap(self, file="events.csv"):
-        """Checks if the event is overlaping with any other event
+        """Checks if the event is overlaping with any other event,
+        If it is, it prints a table with the occupied hours of the day of the event.
         """
-        events = CSV.read(file)
 
         events = []
+        # For each previous year from the events year
         for year in filter(lambda x: x < self.year, years.keys()):
-            events.extend(filter(lambda x: True if x.enddate >= self.startdate else False, reduce(
+            # Adding to events the events that end after this event starts
+            events.extend(filter(lambda x: x.enddate >= self.startdate, reduce(
                 lambda x, y: x+y, [years[year][month].events for month in range(1, 13)])))
-        events.extend(filter(lambda x: True if x.enddate >= self.startdate else False, reduce(
+        # For each event in this events year, up to the next month this events month ->
+        # Adding to the events the events that end after this event starts
+        events.extend(filter(lambda x: x.enddate >= self.startdate, reduce(
             lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)])))
 
         flag = False
