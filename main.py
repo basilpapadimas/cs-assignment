@@ -425,14 +425,15 @@ def repl():
                                     break
 
                             new_event = Event([year, month, day, hour, minutes, duration, title])
-                            overlap = new_event.checkOverlap()
+                            # Check if event (to be registered) is overlapping with another event
+                            overlap = event.checkOverlap()
+                            # If overlapping: loop until event is not overlapping
 
                             while overlap[0]:
                                 print("[-] Γεγονός έχει επικάλυψη με άλλα γεγονότα")
                                 print(overlap[1])
                                 while True:
-                                    answer = input(
-                                        f"[+] Ημερομηνία γεγονότος ({new_event.year}-{new_event.month}-{new_event.day}): ") or f"{new_event.year}-{new_event.month}-{new_event.day}"
+                                    answer = input(f"[+] Ημερομηνία γεγονότος ({new_event.year}-{new_event.month}-{new_event.day}): ") or f"{new_event.year}-{new_event.month}-{new_event.day}"
                                     if fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
                                         continue
                                     year, month, day = map(
@@ -445,8 +446,7 @@ def repl():
                                     break
 
                                 while True:
-                                    answer = input(
-                                        f"[+] Ωρα γεγονότος ({new_event.hour}:{new_event.minutes:02d}): ") or f"{new_event.hour}:{new_event.minutes:02d}"
+                                    answer = input(f"[+] Ωρα γεγονότος ({new_event.hour}:{new_event.minutes:02d}): ") or f"{new_event.hour}:{new_event.minutes:02d}"
                                     if fullmatch(r"\d\d?\:\d\d", answer) == None:
                                         continue
                                     hour, minutes = map(
@@ -454,19 +454,17 @@ def repl():
                                     if not 0 <= hour <= 23 or not 0 <= minutes < 60:
                                         continue
                                     break
-                                new_event = Event([year, month, day, hour,
-                                                   minutes, duration, title])
+                                new_event = Event([year, month, day, hour, minutes, duration, title])
                                 overlap = new_event.checkOverlap()
+                            # Register edited event
                             if new_event.year not in years.keys():
-                                years[new_event.year] = {
-                                    x: Month(x, new_event.year) for x in range(1, 13)}
-                            years[new_event.year][new_event.month].addEvent(
-                                new_event)
-                            print(
-                                f"[*] Το γεγονός ενημερώθηκε: <[{new_event.title}] -> Date: {new_event.year}-{new_event.month}-{new_event.day}, Time: {new_event.hour}:{new_event.minutes:02d}, Duration: {new_event.duration}>")
+                                years[new_event.year] = {x: Month(x, new_event.year) for x in range(1, 13)}
+                            years[new_event.year][new_event.month].addEvent(new_event)
+                            print(f"[*] Το γεγονός ενημερώθηκε: <[{new_event.title}] -> Date: {new_event.year}-{new_event.month}-{new_event.day}, Time: {new_event.hour}:{new_event.minutes:02d}, Duration: {new_event.duration}>")
                             break
             case "*":   # If user enters "*" Then print events of entered month 
-                while True:     # Get user year input (integer)
+                while True:
+                    # Get user year input (integer)
                     answer = input("[+] Εισάγετε έτος: ")
                     if not answer.isdigit():
                         continue
@@ -474,7 +472,8 @@ def repl():
                     if year >= 2022:
                         break
 
-                while True:     # Get user month input (integer)
+                while True:
+                    # Get user month input (integer)
                     answer = input("[+] Εισάγετε μήνα: ")
                     if not answer.isdigit():
                         continue
@@ -483,7 +482,7 @@ def repl():
                         break
 
                 print(f"\n{'='*37} Αναζήτηση γεγονότων {'='*37}\n")
-                # Check if selected mm/yyyy has events
+                # Check if selected mm/yyyy has events. If events exist print them
                 events_len = 0 if year not in years.keys() else len(years[year][month].printEvents())
                 if events_len == 0:
                     print("[-] Κανένα γεγονός αυτόν τον μήνα")
