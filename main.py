@@ -1,6 +1,5 @@
 from calendar import monthrange
 from datetime import timedelta, datetime
-import csv
 from re import fullmatch
 from functools import reduce
 
@@ -9,35 +8,17 @@ class CSVrw:
     def read(filename):
         while True:
             try:
-                with open(filename, 'r', newline='', encoding='cp1252') as file:
-                    leading_bytes = file.read(3)
+                with open(filename, 'r') as file:
+                    return list(map(lambda x: Event(list(map(lambda x: int(x), x[0].split('-'))) + list(map(lambda x: int(x), x[1].split(':'))) + [int(x[2])] + [x[3]]), list(map(lambda x: [fullmatch(r"^([^,]+),([^,]+),([^,]+),([^,]+)$", x).group(i) for i in range(1, 5)], file.read().splitlines()[1:]))))
 
-                    if (leading_bytes != 'ï»¿'):
-                        file.seek(0)
-                    else:
-                        pass
-
-                    return list(map(lambda x: Event(list(map(lambda x: int(x), x[0].split('-'))) + list(map(lambda x: int(x), x[1].split(':'))) + [int(x[2])] + [x[3]]), list(csv.reader(file))[1:]))
             except FileNotFoundError:
-                with open(filename, 'w', newline='', encoding='cp1252') as file:
+                with open(filename, 'w') as file:
                     file.write("")
                 continue
 
     def write(filename):
-        with open(filename, 'w', newline='', encoding='cp1252') as file:
-            file.write("")
-
-            writer = csv.writer(file)
-            writer.writerow(["Date", "Hour", "Duration", "Title"])
-
-            events = []
-            for year in years.keys():
-                for month in years[year]:
-                    events.extend(years[year][month].events)
-            for event in events:
-                writer.writerow([f"{event.year}-{event.month}-{event.day}",
-                                f"{event.hour}:{event.minutes}", event.duration, event.title])
-
+        with open(filename, 'w') as file:
+            file.write("\n".join(["Date,Hour,Duration,Title"] + list(map(lambda x: f"{x.year}-{x.month}-{x.day},{x.hour}:{x.minutes:02d},{x.duration},{x.title}", reduce(lambda x, y: x+y, [years[year][month].events for year in years.keys() for month in years[year]])))))
 
 class Event:
     def __init__(self, ls):
@@ -61,7 +42,7 @@ class Event:
                 while i < datetime(event.year, event.month, event.day) + timedelta(days=1):
                     # Checks for this minute if any event is taking place
                     day[i.hour][i.minute] = any(event.startdate <= i <=
-                                    event.enddate for event in events)
+                                                event.enddate for event in events)
                     i += timedelta(minutes=1)
 
                 # Creates overlap table
