@@ -59,8 +59,8 @@ class Event:
                 h = 0
                 m = 0
                 while i < datetime(event.year, event.month, event.day) + timedelta(days=1):
-                    if any(event.startdate <= i <= event.enddate for event in events):
-                        day[h][m] = True
+                    day[h][m] = any(event.startdate <= i <=
+                                    event.enddate for event in events)
                     i += timedelta(minutes=1)
                     m += 1
                     if m == 60:
