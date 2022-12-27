@@ -93,9 +93,8 @@ def updateEventInfo(event, onlyTime=False):
     return [year, month, day, hour, minutes, duration, title]
 
 
-def getMonth():
-    while True:
-        # Get event year (deletion)
+def eventSearch(years):
+    while True:  # Get event year
         answer = input("[+] Εισάγετε έτος: ")
         if not answer.isdigit():
             continue
@@ -103,15 +102,23 @@ def getMonth():
         if year >= 2022:
             break
 
-    while True:
-        # Get event month (deletion)
+    while True:  # Get event month
         answer = input("[+] Εισάγετε μήνα: ")
         if not answer.isdigit():
             continue
         month = int(answer)
         if 0 < month <= 12:
             break
-    return [year, month]
+
+    print(f"\n{'='*37} Αναζήτηση γεγονότων {'='*37}\n")
+
+    # Check if selected mm/yyyy has events. If events exist print them
+    events_len = 0 if year not in years.keys() else len(
+        years[year][month].printEvents())
+    if events_len == 0:
+        print("[-] Κανένα γεγονός αυτόν τον μήνα")
+
+    return years[year][month], events_len
 
 
 def repl(years):
@@ -171,18 +178,14 @@ def repl(years):
                             break
 
                         case "2":   # If user enters 2 get input for event deletion
-                            year, month = getMonth()
-                            # Print events registered in that mm/yyyy (if any)
-                            print(f"\n{'='*37} Αναζήτηση γεγονότων {'='*37}\n")
-                            events = years[year][month]
-                            events_len = len(events.printEvents())
+                            events, events_len = eventSearch(years)
                             if events_len == 0:
-                                print("[-] Κανένα γεγονός αυτόν τον μήνα")
                                 continue
+
                             # If events exist in selected mm/yyyy select event (for deletion)
                             while True:
                                 answer = input(
-                                    "[+] Επιλέξτε γεγονός προς ενημέρωση: ")
+                                    "[+] Επιλέξτε γεγονός προς διαγραφή: ")
                                 if not answer.isdigit():
                                     continue
                                 event = int(answer)
@@ -197,13 +200,10 @@ def repl(years):
 
                         case "3":   # If user enters 3 get input for event update
                             # Print events registered in that mm/yyyy (if any)
-                            print(f"\n{'='*37} Αναζήτηση γεγονότων {'='*37}\n")
-                            answer = getMonth()
-                            events = years[answer[0]][answer[1]]
-                            events_len = len(events.printEvents())
+                            events, events_len = eventSearch(years)
                             if events_len == 0:
-                                print("[+] Κανένα γεγονός αυτόν τον μήνα")
                                 continue
+
                             # If events exist in selected mm/yyyy select event (for update)
                             while True:
                                 answer = input(
@@ -220,8 +220,8 @@ def repl(years):
 
                             # Check if event (to be registered) is overlapping with another event
                             overlap = new_event.checkOverlap()
-                            # If overlapping: loop until event is not overlapping
 
+                            # If overlapping: loop until event is not overlapping
                             while overlap[0]:
                                 print(
                                     "[-] Γεγονός έχει επικάλυψη με άλλα γεγονότα")
@@ -230,6 +230,7 @@ def repl(years):
                                 new_event = Event(updateEventInfo(
                                     new_event, onlyTime=True))
                                 overlap = new_event.checkOverlap()
+
                             # Register edited event
                             if new_event.year not in years.keys():
                                 years[new_event.year] = {
@@ -241,14 +242,7 @@ def repl(years):
                             break
 
             case "*":   # If user enters "*" Then print events of entered month
-                year, month = getMonth()
-
-                print(f"\n{'='*37} Αναζήτηση γεγονότων {'='*37}\n")
-                # Check if selected mm/yyyy has events. If events exist print them
-                events_len = 0 if year not in years.keys() else len(
-                    years[year][month].printEvents())
-                if events_len == 0:
-                    print("[-] Κανένα γεγονός αυτόν τον μήνα")
+                eventSearch(years)
                 input(
                     "[+] Πατήστε οποιοδήποτε χαρακτήρα για επιστροφή στο κυρίως μενού: ")
 
