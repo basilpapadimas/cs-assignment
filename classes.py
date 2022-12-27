@@ -1,10 +1,14 @@
 from itertools import chain
 from re import fullmatch
 from datetime import datetime, timedelta
+from functools import reduce
 
 
 class CSV:
     def read(filename):
+        """Reads a csv file and return an array of event objects. 
+        If the file doesnt exist, it creates it
+        """
         while True:
             try:
                 with open(filename, 'r') as file:
@@ -16,6 +20,8 @@ class CSV:
                 continue
 
     def write(filename, datastore):
+        """Given a csv file and a dictionary with events it stores them in the csv file
+        """
         with open(filename, 'w') as file:
             file.write("\n".join(["Date,Hour,Duration,Title"] + list(map(lambda x: f"{x.year}-{x.month}-{x.day},{x.hour}:{x.minutes:02d},{x.duration},{x.title}", chain.from_iterable(
                 [datastore[year][month].events for year in datastore.keys() for month in datastore[year]])))))
@@ -29,7 +35,17 @@ class Event:
         self.enddate = self.startdate+timedelta(minutes=self.duration)
 
     def checkOverlap(self, file="events.csv"):
+        """Checks if the event is overlaping with any other event
+        """
         events = CSV.read(file)
+
+        events = []
+        for year in filter(lambda x: x < self.year, years.keys()):
+            events.extend(filter(lambda x: True if x.enddate >= self.startdate else False, reduce(
+                lambda x, y: x+y, [years[year][month].events for month in range(1, 13)])))
+        events.extend(filter(lambda x: True if x.enddate >= self.startdate else False, reduce(
+            lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)])))
+
         flag = False
 
         for event in events:
