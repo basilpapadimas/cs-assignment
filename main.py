@@ -259,7 +259,7 @@ def repl():
 
                             while True:
                                 answer = input("Τίτλος γεγονότος: ")
-                                if "," not in answer:
+                                if "," not in answer and len(answer) > 0:
                                     title = answer
                                     break
 
@@ -419,7 +419,7 @@ def repl():
                             while True:
                                 answer = input(
                                     f"Τίτλος γεγονότος ({event.title}): ") or f"{event.title}"
-                                if "," not in answer:
+                                if "," not in answer and len(answer) > 0:
                                     title = answer
                                     break
 
