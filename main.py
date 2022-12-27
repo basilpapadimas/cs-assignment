@@ -101,8 +101,6 @@ def initialize(file="events.csv"):
     years = {}
 
     events = CSVrw.read(file)
-    if not events:
-        events = CSVrw.read(file)
 
     for event in events:
         if event.year not in years.keys():
