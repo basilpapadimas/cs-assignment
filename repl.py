@@ -39,8 +39,7 @@ def getEventInfo(years):
             break
 
     if year not in years.keys():
-        years[year] = {
-            x: Month(x, year) for x in range(1, 13)}
+        years[year] = {x: Month(x, year) for x in range(1, 13)}
 
     return [year, month, day, hour, minutes, duration, title]
 
@@ -85,8 +84,7 @@ def updateEventInfo(event, years, onlyTime=False):
                 break
 
     if year not in years.keys():
-        years[year] = {
-            x: Month(x, year) for x in range(1, 13)}
+        years[year] = {x: Month(x, year) for x in range(1, 13)}
 
     return [year, month, day, hour, minutes, duration, title]
 
@@ -111,13 +109,10 @@ def eventSearch(years):
     print(f"\n{'='*37} Αναζήτηση γεγονότων {'='*37}\n")
 
     # Check if selected mm/yyyy has events. If events exist print them
-    events_len = 0 if year not in years.keys() else len(
-        years[year][month].events)
-    if events_len == 0:
-        print("[-] Κανένα γεγονός αυτόν τον μήνα")
-        return [], 0
-
-    return years[year][month], events_len
+    if year not in years.keys():
+        years[year] = {x: Month(x, year) for x in range(1, 13)}
+    events = years[year][month].printEvents()
+    return events, len(events)
 
 
 def repl(years):

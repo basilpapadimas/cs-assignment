@@ -96,8 +96,12 @@ class Month:
             return False
 
     def printEvents(self):
-        for index, event in enumerate(self.events):
-            print(
-                f"{index}. [{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}:{event.minutes:02d}, Duration: {event.duration}")
-        print()
-        return self.events
+        if len(self.events) > 0:
+            for index, event in enumerate(self.events):
+                print(
+                    f"{index}. [{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}:{event.minutes:02d}, Duration: {event.duration}")
+            print()
+            return self.events
+        else:
+            print("[-] Κανένα γεγονός αυτόν τον μήνα")
+            return []
