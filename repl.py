@@ -112,9 +112,10 @@ def eventSearch(years):
 
     # Check if selected mm/yyyy has events. If events exist print them
     events_len = 0 if year not in years.keys() else len(
-        years[year][month].printEvents())
+        years[year][month].events)
     if events_len == 0:
         print("[-] Κανένα γεγονός αυτόν τον μήνα")
+        return [], 0
 
     return years[year][month], events_len
 
