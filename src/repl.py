@@ -12,7 +12,7 @@ def getEventInfo():
         if fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
             continue
         year, month, day = map(lambda x: int(x), answer.split("-"))
-        if isinstance(year, int)==False or not 0 < month <= 12:
+        if not 0 < month <= 12:
             continue
         months_days = monthrange(year, month)[1]
         if 0 < day <= months_days:
@@ -52,7 +52,7 @@ def updateEventInfo(event, onlyTime=False):
         if fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
             continue
         year, month, day = map(lambda x: int(x), answer.split("-"))
-        if year < 2022 or not 0 < month <= 12:
+        if not 0 < month <= 12:
             continue
         months_days = monthrange(year, month)[1]
         if 0 < day <= months_days:
