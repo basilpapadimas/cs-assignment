@@ -3,9 +3,10 @@ from re import fullmatch
 from calendar_utils import generate_calendar
 from calendar import monthrange
 from classes import Event, Month, CSV
+from years import years
 
 
-def getEventInfo(years):
+def getEventInfo():
     while True:  # Get event date (registration)
         answer = input("[+] Ημερομηνία γεγονότος (yyyy-mm-dd): ")
         if fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
@@ -44,7 +45,7 @@ def getEventInfo(years):
     return [year, month, day, hour, minutes, duration, title]
 
 
-def updateEventInfo(event, years, onlyTime=False):
+def updateEventInfo(event, onlyTime=False):
     while True:  # Get event's new date
         answer = input(
             f"[+] Ημερομηνία γεγονότος ({event.year}-{event.month}-{event.day}): ") or f"{event.year}-{event.month}-{event.day}"
@@ -89,7 +90,7 @@ def updateEventInfo(event, years, onlyTime=False):
     return [year, month, day, hour, minutes, duration, title]
 
 
-def eventSearch(years):
+def eventSearch():
     while True:  # Get event year
         answer = input("[+] Εισάγετε έτος: ")
         if not answer.isdigit():
@@ -115,11 +116,11 @@ def eventSearch(years):
     return events, len(events)
 
 
-def repl(years):
+def repl():
     mm, yyyy = datetime.now().month, datetime.now().year
 
     while True:
-        print(f"\n{'='*95}\n{generate_calendar(mm, yyyy, years)}")
+        print(f"\n{'='*95}\n{generate_calendar(mm, yyyy)}")
 
         choice = input('''
 Πατήστε ENTER για προβολή του επόμενου μήνα, "q" για έξοδο ή κάποια από τις παρακάτω επιλογές:
@@ -148,16 +149,16 @@ def repl(years):
                             break
 
                         case "1":   # If user enters 1 get input for event registration
-                            event = Event(getEventInfo(years))
+                            event = Event(getEventInfo())
                             # Check if event (to be registered) is overlapping with another event
-                            overlap = event.checkOverlap(years)
+                            overlap = event.checkOverlap()
                             # If overlapping: loop until event is not overlapping
                             while overlap[0]:
                                 print(
                                     "[+] Γεγονός έχει επικάλυψη με άλλα γεγονότα\n", overlap[1])
                                 event = Event(updateEventInfo(
-                                    event, years, onlyTime=True))
-                                overlap = event.checkOverlap(years)
+                                    event, onlyTime=True))
+                                overlap = event.checkOverlap()
                             # Register event
                             years[event.year][event.month].addEvent(event)
                             print(
@@ -165,7 +166,7 @@ def repl(years):
                             break
 
                         case "2":   # If user enters 2 get input for event deletion
-                            events, events_len = eventSearch(years)
+                            events, events_len = eventSearch()
                             if events_len == 0:
                                 continue
 
@@ -178,16 +179,16 @@ def repl(years):
                                 event = int(answer)
                                 if 0 <= event < events_len:
                                     break
-                            event = events.events[event]
+                            event = events[event]
                             # Delete selected event
-                            events.removeEvent(event)
+                            years[event.year][event.month].removeEvent(event)
                             print(
                                 f"[+] Το γεγονός διαγράφηκε: <[{event.title}] -> Date: {event.year}-{event.month}-{event.day}, Time: {event.hour}:{event.minutes:02d}, Duration: {event.duration}>")
                             break
 
                         case "3":   # If user enters 3 get input for event update
                             # Print events registered in that mm/yyyy (if any)
-                            events, events_len = eventSearch(years)
+                            events, events_len = eventSearch()
                             if events_len == 0:
                                 continue
 
@@ -200,13 +201,13 @@ def repl(years):
                                 event = int(answer)
                                 if 0 <= event < events_len:
                                     break
-                            event = events.events[event]
-                            new_event = Event(updateEventInfo(event, years))
+                            event = events[event]
+                            new_event = Event(updateEventInfo(event))
                             # Remove event temporarily so there are no overhead overlaps
                             years[event.year][event.month].removeEvent(event)
 
                             # Check if event (to be registered) is overlapping with another event
-                            overlap = new_event.checkOverlap(years)
+                            overlap = new_event.checkOverlap()
 
                             # If overlapping: loop until event is not overlapping
                             while overlap[0]:
@@ -214,8 +215,8 @@ def repl(years):
                                     "[-] Γεγονός έχει επικάλυψη με άλλα γεγονότα\n", overlap[1])
 
                                 new_event = Event(updateEventInfo(
-                                    new_event, years, onlyTime=True))
-                                overlap = new_event.checkOverlap(years)
+                                    new_event, onlyTime=True))
+                                overlap = new_event.checkOverlap()
 
                             # Register edited event
                             years[new_event.year][new_event.month].addEvent(
@@ -225,10 +226,10 @@ def repl(years):
                             break
 
             case "*":   # If user enters "*" Then print events of entered month
-                eventSearch(years)
+                eventSearch()
                 input(
                     "[+] Πατήστε οποιοδήποτε χαρακτήρα για επιστροφή στο κυρίως μενού: ")
 
             case "q":
-                CSV.write("events.csv", years)
+                CSV.write("events.csv")
                 raise SystemExit(0)

@@ -1,8 +1,8 @@
 from calendar import monthrange
 from datetime import datetime, timedelta
+from years import years
 
-
-def generate_calendar(mm: int, yyyy: int, years):
+def generate_calendar(mm: int, yyyy: int):
     """Given an input of month number (1 to 12) and year
     it returns a string of the calendar of the month
     including last days of last month and first days of next month
@@ -63,7 +63,7 @@ def generate_calendar(mm: int, yyyy: int, years):
     return calendar_string
 
 
-def print_notifications(years):
+def print_notifications():
     """Checks if events are today and after the current time and displays them"""
 
     now = datetime.now()

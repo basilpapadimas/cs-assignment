@@ -2,7 +2,7 @@ from itertools import chain
 from re import fullmatch
 from datetime import datetime, timedelta
 from functools import reduce
-
+from years import years
 
 class CSV:
     def read(filename):
@@ -19,12 +19,12 @@ class CSV:
                     file.write("")
                 continue
 
-    def write(filename, datastore):
+    def write(filename):
         """Given a csv file and a dictionary with events it stores them in the csv file
         """
         with open(filename, 'w') as file:
             file.write("\n".join(["Date,Hour,Duration,Title"] + list(map(lambda x: f"{x.year}-{x.month}-{x.day},{x.hour}:{x.minutes:02d},{x.duration},{x.title}", chain.from_iterable(
-                [datastore[year][month].events for year in datastore.keys() for month in datastore[year]])))))
+                [years[year][month].events for year in years.keys() for month in years[year]])))))
 
 
 class Event:
@@ -34,21 +34,21 @@ class Event:
             self.year, self.month, self.day, self.hour, self.minutes)
         self.enddate = self.startdate+timedelta(minutes=self.duration)
 
-    def checkOverlap(self, datastore):
+    def checkOverlap(self):
         """Checks if the event is overlaping with any other event,
         If it is, it prints a table with the occupied hours of the day of the event.
         """
 
         events = []
         # For each previous year from the events year
-        for year in filter(lambda x: x < self.year, datastore.keys()):
+        for year in filter(lambda x: x < self.year, years.keys()):
             # Adding to events the events that end after this event starts
             events.extend(reduce(
-                lambda x, y: x+y, [datastore[year][month].events for month in range(1, 13)]))
+                lambda x, y: x+y, [years[year][month].events for month in range(1, 13)]))
         # For each event in this events year, up to the next month this events month ->
         # Adding to the events the events that end after this event starts
         events.extend(reduce(
-            lambda x, y: x+y, [datastore[self.year][month].events for month in range(1, self.month+1)]))
+            lambda x, y: x+y, [years[self.year][month].events for month in range(1, self.month+1)]))
 
         flag = False
 

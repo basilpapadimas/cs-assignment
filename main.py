@@ -1,12 +1,10 @@
 from classes import CSV, Month
 from repl import repl
 from calendar_utils import print_notifications
+from years import years
 
 
 def initialize(file):
-    global years
-    years = {}
-
     events = CSV.read(file)
 
     for event in events:
@@ -18,6 +16,6 @@ def initialize(file):
 if __name__ == "__main__":
     initialize("events.csv")
     print('\n')
-    print_notifications(years)
+    print_notifications()
     print('\n')
-    repl(years)
+    repl()
