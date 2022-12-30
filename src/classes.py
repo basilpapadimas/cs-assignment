@@ -2,7 +2,7 @@ from itertools import chain
 from re import fullmatch
 from datetime import datetime, timedelta
 from functools import reduce
-from years import years
+from src.years import years
 
 class CSV:
     def read(filename):

@@ -1,9 +1,9 @@
 from datetime import datetime
 from re import fullmatch
-from calendar_utils import generate_calendar
+from src.calendar_utils import generate_calendar
 from calendar import monthrange
-from classes import Event, Month, CSV
-from years import years
+from src.classes import Event, Month, CSV
+from src.years import years
 
 
 def getEventInfo():
@@ -12,7 +12,7 @@ def getEventInfo():
         if fullmatch(r"\d\d\d\d\-\d\d?\-\d\d?", answer) == None:
             continue
         year, month, day = map(lambda x: int(x), answer.split("-"))
-        if year < 2022 or not 0 < month <= 12:
+        if isinstance(year, int)==False or not 0 < month <= 12:
             continue
         months_days = monthrange(year, month)[1]
         if 0 < day <= months_days:
@@ -93,10 +93,8 @@ def updateEventInfo(event, onlyTime=False):
 def eventSearch():
     while True:  # Get event year
         answer = input("[+] Εισάγετε έτος: ")
-        if not answer.isdigit():
-            continue
-        year = int(answer)
-        if year >= 2022:
+        if answer.isdigit():
+            year = int(answer)
             break
 
     while True:  # Get event month
