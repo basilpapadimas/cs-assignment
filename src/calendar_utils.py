@@ -22,27 +22,33 @@ def generate_calendar(mm: int, yyyy: int):
         [ 26]｜ [ 27]｜ [ 28]｜ [ 29]｜ [ 30]｜ [ 31]｜     1
         ───────────────────────────────────────────────────────"
     """
-
-    calendar_string = f"""
-    {'─'*55}
-       ｜{['ΙΑΝ', 'ΦΕΒ', 'ΜΑΡ', 'ΑΠΡ', 'ΜΑΙ', 'ΙΟΥΝ', 'ΙΟΥΛ', 'ΑΥΓ', 'ΣΕΠ', 'ΟΚΤ', 'ΝΟΕ', 'ΔΕΚ'][mm-1]} {yyyy}｜
-    {'─'*55}
-    {'｜ '.join(['  ΔΕΥ', '  ΤΡΙ', '  ΤΕΤ', '  ΠΕΜ', '  ΠΑΡ', '  ΣΑΒ', '  ΚΥΡ'])}
-    """
+# ╭╮╯╰ ┼
+    months = ['ΙΑΝ', 'ΦΕΒ', 'ΜΑΡ', 'ΑΠΡ', 'ΜΑΙ', 'ΙΟΥΝ', 'ΙΟΥΛ', 'ΑΥΓ', 'ΣΕΠ', 'ΟΚΤ', 'ΝΟΕ', 'ΔΕΚ']
+    if months[mm-1] not in months[5:7]:
+        calendar_string = f"""
+    ┏━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┓
+    ┃                   ┃{months[mm-1]} {yyyy}┃{' '*(27-len(str(months[mm-1])+' '+str(yyyy)))}┃
+    ┣━━━━━━┳━━━━━━┳━━━━━┻┳━━━━━━┳┻━━━━━┳━━━━━━┳━━━━━━┫"""
+    else:
+        calendar_string = f"""
+    ┏━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┓
+    ┃                  ┃{months[mm-1]} {yyyy}┃{' '*(28-len(str(months[mm-1])+' '+str(yyyy)))}┃
+    ┣━━━━━━┳━━━━━━┳━━━━┻━┳━━━━━━┳┻━━━━━┳━━━━━━┳━━━━━━┫"""
+    
+    calendar_string += f"""
+    ┃{'┃'.join(['  ΔΕΥ ',  '  ΤΡΙ ', '  ΤΕΤ ', '  ΠΕΜ ', '  ΠΑΡ ', '  ΣΑΒ ', '  ΚΥΡ '])}┃
+    ┣━━━━━━╇━━━━━━╇━━━━━━╇━━━━━━╇━━━━━━╇━━━━━━╇━━━━━━┫
+    ┃ """
 
     if monthrange(yyyy, mm)[0] != 0:
-        last_days_of_last_month = [f"   {x}" for x in list(range(1, int(monthrange(yyyy, int(
-            mm) - 1 + 12*(1 if mm == 1 else 0))[1]) + 1))[-1 * int(monthrange(yyyy, mm)[0]):]]
+        # BALE TA COLOR CODES PRIN KAI META TO {day}
+        last_days_of_last_month = [f'  {day} ' if len(str(day)) == 1 else f' {day} ' for day in list(range(1, int(monthrange(yyyy, int(mm) - 1 + 12*(1 if mm == 1 else 0))[1]) + 1))[-1 * int(monthrange(yyyy, mm)[0]):]]
     else:
         last_days_of_last_month = []
-
-    days_of_given_mm = [f'[  {day}]' if len(str(day)) == 1 else f'[ {day}]' for day in list(
-        range(1, monthrange(yyyy, mm)[1] + 1))]
-
-    first_days_of_next_month_needed_num = [f"    {x}" for x in list(range(
-        1, 6 - datetime(yyyy, mm, int(days_of_given_mm[-1].replace('[ ', '').replace(']', ''))).weekday() + 1))]
-    days_to_be_printed = last_days_of_last_month + \
-        days_of_given_mm + first_days_of_next_month_needed_num
+    days_of_given_mm = [f' d{day} ' if len(str(day)) == 1 else f'd{day} '  for day in list(range(1, monthrange(yyyy, mm)[1] + 1))]
+    # BALE TA COLOR CODES PRIN KAI META TO {day}
+    first_days_of_next_month_needed_num = [f'  {day} ' if len(str(day)) == 1 else f' {day} ' for day in list(range(1, 6 - datetime(yyyy, mm, int(days_of_given_mm[-1].replace('d', ''))).weekday() + 1))]
+    days_to_be_printed = last_days_of_last_month + days_of_given_mm + first_days_of_next_month_needed_num
 
     eventful_days = set()
     if yyyy in years.keys():
@@ -50,15 +56,19 @@ def generate_calendar(mm: int, yyyy: int):
             eventful_days.add(event.day)
 
     for i in range(len(days_to_be_printed)):
-        if '[' in days_to_be_printed[i]:  # CHECKS IF DATE IS FROM MONTH SELECTED
+        if 'd' in days_to_be_printed[i]:  # CHECKS IF DATE IS FROM MONTH SELECTED
             # CHECKS IF DAY HAS AT LEAST ONE EVENT
-            if int(days_to_be_printed[i].replace('[ ', '').replace(']', '')) in eventful_days:
+            if int(days_to_be_printed[i].replace('d', '')) in eventful_days:
                 # CHANGES [ DAY] TO [*DAY]
-                days_to_be_printed[i] = f"[*{days_to_be_printed[i].replace('[ ', '').replace(']', '')}]"
+                days_to_be_printed[i] = f"*{days_to_be_printed[i].replace('d', '')}"
+            days_to_be_printed[i] = days_to_be_printed[i].replace(f'd', ' ')
 
     for line in [days_to_be_printed[x:x+7] for x in range(0, len(days_to_be_printed), 7)]:
-        calendar_string += '｜ '.join(line) + "\n    "
-    calendar_string += '─'*55
+        calendar_string += ' │ '.join(line) + " ┃"
+        if line != [days_to_be_printed[x:x+7] for x in range(0, len(days_to_be_printed), 7)][-1]:
+            calendar_string += '\n    ┠──────┼──────┼──────┼──────┼──────┼──────┼──────┨\n    ┃ '
+        else:
+            calendar_string += '\n    ┗━━━━━━┷━━━━━━┷━━━━━━┷━━━━━━┷━━━━━━┷━━━━━━┷━━━━━━┛'
 
     return calendar_string
 
