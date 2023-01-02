@@ -2,7 +2,6 @@ from calendar import monthrange
 from datetime import datetime, timedelta
 from src.years import years
 from sys import platform
-from termcolor import colored
 
 def generate_calendar(mm: int, yyyy: int):
     """Given an input of month number (1 to 12) and year
@@ -43,11 +42,12 @@ def generate_calendar(mm: int, yyyy: int):
     ┃ """
 
     if monthrange(yyyy, mm)[0] != 0:
-        last_days_of_last_month = [colored(f' {day} ', "grey") for day in list(range(1, int(monthrange(yyyy, int(mm) - 1 + 12*(1 if mm == 1 else 0))[1]) + 1))[-1 * int(monthrange(yyyy, mm)[0]):]]
+        last_days_of_last_month = [f' \033[90m{day}\033[39m ' for day in list(range(1, int(monthrange(yyyy, int(mm) - 1 + 12*(1 if mm == 1 else 0))[1]) + 1))[-1 * int(monthrange(yyyy, mm)[0]):]]
     else:
         last_days_of_last_month = []
-    days_of_given_mm = [f' d{day} ' if len(str(day)) == 1 else f'd{day} '  for day in list(range(1, monthrange(yyyy, mm)[1] + 1))]
-    first_days_of_next_month_needed_num = [colored(f'  {day} ', "grey") for day in list(range(1, 6 - datetime(yyyy, mm, int(days_of_given_mm[-1].replace('d', ''))).weekday() + 1))]
+    days_of_given_mm = [f' d{day} ' if len(str(day)) == 1 else f'd{day} '  for day in list(range(1, monthrange(yyyy, mm)[1] + 1))] # \033[97m \033[90m
+    first_days_of_next_month_needed_num = ["\033[90m"+f'  {day} '+"\033[39m" for day in list(range(1, 6 - datetime(yyyy, mm, int(days_of_given_mm[-1].replace('d', ''))).weekday() + 1))]
+    print(days_of_given_mm)
     days_to_be_printed = last_days_of_last_month + days_of_given_mm + first_days_of_next_month_needed_num
 
     eventful_days = set()
