@@ -118,7 +118,7 @@ def repl():
     mm, yyyy = datetime.now().month, datetime.now().year
 
     while True:
-        print(f"\n{'='*95}\n{generate_calendar(mm, yyyy)}")
+        print(f"\n{'='*80}\n{generate_calendar(mm, yyyy)}")
 
         choice = input('''
 Πατήστε ENTER για προβολή του επόμενου μήνα, "q" για έξοδο ή κάποια από τις παρακάτω επιλογές:
