@@ -59,9 +59,15 @@ def generate_calendar(mm: int, yyyy: int):
             # CHECKS IF DAY HAS AT LEAST ONE EVENT
             if int(days_to_be_printed[i].replace('d', '')) in eventful_days:
                 # CHANGES [ DAY] TO [*DAY]
-                days_to_be_printed[i] = f"\033[97m{days_to_be_printed[i].replace('d', '*')}\033[39m"
+                if datetime.now().month == mm and datetime.now().year == yyyy and int(days_to_be_printed[i].replace('d', '')) == datetime.now().day:
+                    days_to_be_printed[i] = f"\033[107m\033[30m{days_to_be_printed[i].replace('d', '*')}\033[0m"
+                else:
+                    days_to_be_printed[i] = f"\033[97m{days_to_be_printed[i].replace('d', '*')}\033[39m"
                 continue
-            days_to_be_printed[i] = f"\033[97m{days_to_be_printed[i].replace(f'd', ' ')}\033[39m"
+            if datetime.now().month == mm and datetime.now().year == yyyy and int(days_to_be_printed[i].replace('d', '')) == datetime.now().day:
+                days_to_be_printed[i] = f"\033[107m\033[30m{days_to_be_printed[i].replace('d', ' ')}\033[0m"
+            else:
+                days_to_be_printed[i] = f"\033[97m{days_to_be_printed[i].replace('d', ' ')}\033[39m"
 
     for line in [days_to_be_printed[x:x+7] for x in range(0, len(days_to_be_printed), 7)]:
         calendar_string += ' │ '.join(line) + " │"
