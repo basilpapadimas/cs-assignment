@@ -45,7 +45,7 @@ def generate_calendar(mm: int, yyyy: int):
         last_days_of_last_month = [f' \033[90m{day}\033[39m ' for day in list(range(1, int(monthrange(yyyy, int(mm) - 1 + 12*(1 if mm == 1 else 0))[1]) + 1))[-1 * int(monthrange(yyyy, mm)[0]):]]
     else:
         last_days_of_last_month = []
-    days_of_given_mm = [f' d{day} ' if len(str(day)) == 1 else f'd{day} '  for day in list(range(1, monthrange(yyyy, mm)[1] + 1))] # \033[97m \033[90m
+    days_of_given_mm = [f' d{day} ' if len(str(day)) == 1 else f'd{day} '  for day in list(range(1, monthrange(yyyy, mm)[1] + 1))]
     first_days_of_next_month_needed_num = ["\033[90m"+f'  {day} '+"\033[39m" for day in list(range(1, 6 - datetime(yyyy, mm, int(days_of_given_mm[-1].replace('d', ''))).weekday() + 1))]
     print(days_of_given_mm)
     days_to_be_printed = last_days_of_last_month + days_of_given_mm + first_days_of_next_month_needed_num
@@ -60,8 +60,8 @@ def generate_calendar(mm: int, yyyy: int):
             # CHECKS IF DAY HAS AT LEAST ONE EVENT
             if int(days_to_be_printed[i].replace('d', '')) in eventful_days:
                 # CHANGES [ DAY] TO [*DAY]
-                days_to_be_printed[i] = f"*{days_to_be_printed[i].replace('d', '')}"
-            days_to_be_printed[i] = days_to_be_printed[i].replace(f'd', ' ')
+                days_to_be_printed[i] = f"*\033[97m{days_to_be_printed[i].replace('d', '')}\033[39m"
+            days_to_be_printed[i] = f"\033[97m{days_to_be_printed[i].replace(f'd', ' ')}\033[39m"
 
     for line in [days_to_be_printed[x:x+7] for x in range(0, len(days_to_be_printed), 7)]:
         calendar_string += ' │ '.join(line) + " ┃"
