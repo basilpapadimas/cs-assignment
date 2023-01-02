@@ -7,23 +7,8 @@ def generate_calendar(mm: int, yyyy: int):
     """Given an input of month number (1 to 12) and year
     it returns a string of the calendar of the month
     including last days of last month and first days of next month
-    if they so collide with the calendar
+    if they so collide with the calendar"""
 
-    >>> initialize()
-    >>> generate_calendar(12, 2022)
-    "
-        ───────────────────────────────────────────────────────
-           ｜ΔΕΚ 2022｜
-        ───────────────────────────────────────────────────────
-          ΔΕΥ｜   ΤΡΙ｜   ΤΕΤ｜   ΠΕΜ｜   ΠΑΡ｜   ΣΑΒ｜   ΚΥΡ
-           28｜    29｜    30｜ [  1]｜ [  2]｜ [  3]｜ [  4]
-        [  5]｜ [  6]｜ [  7]｜ [  8]｜ [  9]｜ [ 10]｜ [ 11]
-        [ 12]｜ [ 13]｜ [ 14]｜ [ 15]｜ [ 16]｜ [ 17]｜ [ 18]
-        [ 19]｜ [ 20]｜ [ 21]｜ [ 22]｜ [ 23]｜ [ 24]｜ [ 25]
-        [ 26]｜ [ 27]｜ [ 28]｜ [ 29]｜ [ 30]｜ [ 31]｜     1
-        ───────────────────────────────────────────────────────"
-    """
-# ╭╮╯╰ ┼
     months = ['ΙΑΝ', 'ΦΕΒ', 'ΜΑΡ', 'ΑΠΡ', 'ΜΑΙ', 'ΙΟΥΝ', 'ΙΟΥΛ', 'ΑΥΓ', 'ΣΕΠ', 'ΟΚΤ', 'ΝΟΕ', 'ΔΕΚ']
     if months[mm-1] not in months[5:7]:
         calendar_string = f"""
