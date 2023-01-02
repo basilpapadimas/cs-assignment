@@ -1,6 +1,8 @@
 from calendar import monthrange
 from datetime import datetime, timedelta
 from src.years import years
+from sys import platform
+from termcolor import colored
 
 def generate_calendar(mm: int, yyyy: int):
     """Given an input of month number (1 to 12) and year
@@ -26,28 +28,26 @@ def generate_calendar(mm: int, yyyy: int):
     months = ['ΙΑΝ', 'ΦΕΒ', 'ΜΑΡ', 'ΑΠΡ', 'ΜΑΙ', 'ΙΟΥΝ', 'ΙΟΥΛ', 'ΑΥΓ', 'ΣΕΠ', 'ΟΚΤ', 'ΝΟΕ', 'ΔΕΚ']
     if months[mm-1] not in months[5:7]:
         calendar_string = f"""
-    ┏━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┓
-    ┃                   ┃{months[mm-1]} {yyyy}┃{' '*(27-len(str(months[mm-1])+' '+str(yyyy)))}┃
-    ┣━━━━━━┳━━━━━━┳━━━━━┻┳━━━━━━┳┻━━━━━┳━━━━━━┳━━━━━━┫"""
+    ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+    ┃  {months[mm-1]}  {yyyy}   {' '*(27-len(str(months[mm-1])+' '+str(yyyy)))}               ┃
+    ┣━━━━━━┳━━━━━━┳━━━━━━┳━━━━━━┳━━━━━━┳━━━━━━┳━━━━━━┫"""
     else:
         calendar_string = f"""
-    ┏━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┓
-    ┃                  ┃{months[mm-1]} {yyyy}┃{' '*(28-len(str(months[mm-1])+' '+str(yyyy)))}┃
-    ┣━━━━━━┳━━━━━━┳━━━━┻━┳━━━━━━┳┻━━━━━┳━━━━━━┳━━━━━━┫"""
+    ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+    ┃  {months[mm-1]} {yyyy}   {' '*(28-len(str(months[mm-1])+' '+str(yyyy)))}               ┃
+    ┣━━━━━━┳━━━━━━┳━━━━━━┳━━━━━━┳┻━━━━━┳━━━━━━┳━━━━━━┫"""
     
     calendar_string += f"""
-    ┃{'┃'.join(['  ΔΕΥ ',  '  ΤΡΙ ', '  ΤΕΤ ', '  ΠΕΜ ', '  ΠΑΡ ', '  ΣΑΒ ', '  ΚΥΡ '])}┃
+    ┃{'┃'.join(['  ΔΕ  ',  '  ΤΡ  ', '  ΤΕ  ', '  ΠΕ  ', '  ΠΑ  ', '  ΣΑ  ', '  ΚΥ  '])}┃
     ┣━━━━━━╇━━━━━━╇━━━━━━╇━━━━━━╇━━━━━━╇━━━━━━╇━━━━━━┫
     ┃ """
 
     if monthrange(yyyy, mm)[0] != 0:
-        # BALE TA COLOR CODES PRIN KAI META TO {day}
-        last_days_of_last_month = [f'  {day} ' if len(str(day)) == 1 else f' {day} ' for day in list(range(1, int(monthrange(yyyy, int(mm) - 1 + 12*(1 if mm == 1 else 0))[1]) + 1))[-1 * int(monthrange(yyyy, mm)[0]):]]
+        last_days_of_last_month = [colored(f' {day} ', "grey") for day in list(range(1, int(monthrange(yyyy, int(mm) - 1 + 12*(1 if mm == 1 else 0))[1]) + 1))[-1 * int(monthrange(yyyy, mm)[0]):]]
     else:
         last_days_of_last_month = []
     days_of_given_mm = [f' d{day} ' if len(str(day)) == 1 else f'd{day} '  for day in list(range(1, monthrange(yyyy, mm)[1] + 1))]
-    # BALE TA COLOR CODES PRIN KAI META TO {day}
-    first_days_of_next_month_needed_num = [f'  {day} ' if len(str(day)) == 1 else f' {day} ' for day in list(range(1, 6 - datetime(yyyy, mm, int(days_of_given_mm[-1].replace('d', ''))).weekday() + 1))]
+    first_days_of_next_month_needed_num = [colored(f'  {day} ', "grey") for day in list(range(1, 6 - datetime(yyyy, mm, int(days_of_given_mm[-1].replace('d', ''))).weekday() + 1))]
     days_to_be_printed = last_days_of_last_month + days_of_given_mm + first_days_of_next_month_needed_num
 
     eventful_days = set()
@@ -70,6 +70,9 @@ def generate_calendar(mm: int, yyyy: int):
         else:
             calendar_string += '\n    ┗━━━━━━┷━━━━━━┷━━━━━━┷━━━━━━┷━━━━━━┷━━━━━━┷━━━━━━┛'
 
+    if platform == "win32":
+        from colorama import just_fix_windows_console
+        just_fix_windows_console()
     return calendar_string
 
 
