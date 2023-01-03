@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from functools import reduce
 from src.years import years
 
+
 class CSV:
     def read(filename):
         """Reads a csv file and return an array of event objects. 
