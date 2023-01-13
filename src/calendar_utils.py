@@ -73,6 +73,13 @@ def generate_calendar(mm: int, yyyy: int):
             calendar_string += '\n    └──────┴──────┴──────┴──────┴──────┴──────┴──────┘'
 
     if platform == "win32":
+        import pip
+
+        try:
+            __import__("colorama")
+        except ImportError:
+            pip.main(['install', '--user', "colorama"])
+
         from colorama import just_fix_windows_console
         just_fix_windows_console()
     return calendar_string
