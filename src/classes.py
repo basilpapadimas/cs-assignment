@@ -12,18 +12,18 @@ class CSV:
         """
         while True:
             try:
-                with open(filename, 'r', encoding="utf-16") as file:
+                with open(filename, 'r', encoding="utf-8") as file:
                     return list(map(lambda x: Event(list(map(lambda x: int(x), x[0].split('-'))) + list(map(lambda x: int(x), x[1].split(':'))) + [int(x[2])] + [x[3]]), list(map(lambda x: [fullmatch(r"^([^,]+),([^,]+),([^,]+),([^,]+)$", x).group(i) for i in range(1, 5)], file.read().splitlines()[1:]))))
 
             except FileNotFoundError:
-                with open(filename, 'w', encoding="utf-16") as file:
+                with open(filename, 'w', encoding="utf-8") as file:
                     file.write("")
                 continue
 
     def write(filename):
         """Given a csv file it stores the years dictionary in the csv file
         """
-        with open(filename, 'w', encoding="utf-16") as file:
+        with open(filename, 'w', encoding="utf-8") as file:
             file.write("\n".join(["Date,Hour,Duration,Title"] + list(map(lambda x: f"{x.year}-{x.month}-{x.day},{x.hour}:{x.minutes:02d},{x.duration},{x.title}",
                                                                          chain.from_iterable([years[i][j].events for i in years.keys() for j in years[i]])))))
 
