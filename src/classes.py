@@ -21,11 +21,11 @@ class CSV:
                 continue
 
     def write(filename):
-        """Given a csv file and a dictionary with events it stores them in the csv file
+        """Given a csv file it stores the years dictionary in the csv file
         """
         with open(filename, 'w') as file:
-            file.write("\n".join(["Date,Hour,Duration,Title"] + list(map(lambda x: f"{x.year}-{x.month}-{x.day},{x.hour}:{x.minutes:02d},{x.duration},{x.title}", chain.from_iterable(
-                [years[year][month].events for year in years.keys() for month in years[year]])))))
+            file.write("\n".join(["Date,Hour,Duration,Title"] + list(map(lambda x: f"{x.year}-{x.month}-{x.day},{x.hour}:{x.minutes:02d},{x.duration},{x.title}",
+                                                                         chain.from_iterable([years[i][j].events for i in years.keys() for j in years[i]])))))
 
 
 class Event:
